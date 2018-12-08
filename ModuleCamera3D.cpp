@@ -64,7 +64,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	// Mouse motion ----------------
 
-	/*if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
@@ -97,20 +97,26 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		Position = Reference + Z * length(Position);
-	}*/
+	}
+	else
+	{
 
-	mat4x4 matrix;
-	App->player->vehicle->GetTransform(&matrix);
+		mat4x4 matrix;
+		App->player->vehicle->GetTransform(&matrix);
 
-	Position = matrix.translation();
+		Position = matrix.translation();
 
-	X = vec3{ matrix[0],matrix[1],matrix[2] };
-	Y = vec3{ matrix[4], matrix[5], matrix[6] };
-	Z = vec3{ matrix[8], matrix[9],matrix[10] };
+		X = vec3{ matrix[0],matrix[1],matrix[2] };
+		Y = vec3{ matrix[4], matrix[5], matrix[6] };
+		Z = vec3{ matrix[8], matrix[9],matrix[10] };
 
-	vec3 VehicleLocation = { matrix[12], matrix[13] + 7, matrix[14] };
-	Look((VehicleLocation)-Z * 15, VehicleLocation, true);
+		vec3 VehicleLocation = { matrix[12], matrix[13] + 7, matrix[14] };
+		Look((VehicleLocation)-Z * 15, VehicleLocation, true);
+	}
+	
 
+	
+	
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
 
