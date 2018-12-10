@@ -9,12 +9,7 @@
 struct PhysBody3D;
 struct PhysMotor3D;
 
-enum FLOOR_TYPE {
-	TOP_FLOOR,
-	BOTTOM_FLOOR,
-	WALL,
-	EMPTY_FLOOR,
-};
+
 
 class ModuleSceneIntro : public Module
 {
@@ -38,11 +33,24 @@ public:
 	Sphere s_snake2[MAX_SNAKE];
 	*/
 
+	int circuit[40] // 1 = create a path ; 2 = doesnt create a path;
+	{
+		1,2,2,2,
+		1,1,2,2,
+		2,1,1,2,
+		2,2,1,2,
+		2,2,1,1,
+		2,2,2,1,
+		2,1,1,1,
+		2,1,2,2,
+		2,1,1,1,
+		2,2,2,3
+	};
 	
 	p2DynArray<PhysBody3D*> pb_cubes;
 	p2DynArray<Cube>s_cubes;
-	PhysBody3D* pb_cube[5];
-	Cube s_cube[5];
+	/*PhysBody3D* pb_cube[5];
+	Cube s_cube[5];*/
 
 	PhysBody3D* pb_chassis;
 	Cube p_chassis;

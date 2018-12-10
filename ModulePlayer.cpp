@@ -19,7 +19,7 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	VehicleInfo car;
-
+	playerTime.Start();
 	// Car properties ----------------------------------------
 	car.chassis_size.Set(3, 1.5, 6);
 	car.chassis_offset.Set(0, 1.5, 0);
@@ -146,17 +146,17 @@ update_status ModulePlayer::Update(float dt)
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);
 	vehicle->Brake(brake);
-
 	vehicle->Render();
 
 	char title[80];
-	sprintf_s(title, "%.1f Km/h /t Timer: %.1f s", vehicle->GetKmh(), f = SDL_GetTicks()/ 1000);
+	sprintf_s(title, "%.1f Km/h  Timer: %.0f s", vehicle->GetKmh(), ShowTime());
 	App->window->SetTitle(title);
-
-	
 
 	return UPDATE_CONTINUE;
 }
 
-
+float ModulePlayer::ShowTime()
+{
+	return playerTime.Read() / 1000;
+}
 

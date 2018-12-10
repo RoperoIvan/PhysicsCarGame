@@ -18,12 +18,12 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
-
+	float ShowTime();
 public:
 
 	PhysVehicle3D* vehicle;
 	float turn;
 	float acceleration;
 	float brake;
-	float f = 0.0f;
+	Timer playerTime;
 };
