@@ -21,8 +21,9 @@ public:
 	float ShowTime();
 	void Restart();
 	void WinAchieved();
-	void UI();
+	void UI(bool reset);
 	void SetScore();
+	void Stop();
 public:
 
 	PhysVehicle3D* vehicle;
@@ -31,5 +32,6 @@ public:
 	float brake;
 	float bestTime = 0.0f;
 	Timer playerTime;
+	bool controls = true, reset = false;
 
 };
