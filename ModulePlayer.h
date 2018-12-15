@@ -20,12 +20,16 @@ public:
 	bool CleanUp();
 	float ShowTime();
 	void Restart();
+	void WinAchieved();
+	void UI();
+	void SetScore();
 public:
 
 	PhysVehicle3D* vehicle;
 	float turn;
 	float acceleration;
 	float brake;
+	float bestTime = 0.0f;
 	Timer playerTime;
-	
+
 };

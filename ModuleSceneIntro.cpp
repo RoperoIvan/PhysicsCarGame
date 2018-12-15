@@ -38,7 +38,7 @@ bool ModuleSceneIntro::Start()
 			CreateFloor(vec3(30, 1, 30), 30 * i, 30 * j, circuit[(4 * j) + i]);
 		}
 	}
-
+	sensor_victory.color = Yellow;
 	sensor_victory.Size(30, 1, 30);
 	pb_victory = App->physics->AddBody(sensor_victory, 0);
 	pb_victory->SetPos(90, 0, 270);
@@ -79,7 +79,7 @@ update_status ModuleSceneIntro::Update(float dt)
 			pb_limits[i]->SetAsSensor(true);
 			pb_limits[i]->collision_listeners.add(this);
 		}
-
+		sensor_victory.Render();
 	}
 	return UPDATE_CONTINUE;
 }
@@ -89,7 +89,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 if ((body1 == pb_victory) || (body2 == pb_victory))
 {
-	App->player->Restart();
+	App->player->WinAchieved();
 }
 for (int i = 0; i < s_limits.Count(); i++)
 {

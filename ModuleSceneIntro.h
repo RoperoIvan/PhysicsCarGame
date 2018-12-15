@@ -53,4 +53,5 @@ public:
 
 	PhysBody3D* pb_victory;
 	Cube sensor_victory;
+
 };
