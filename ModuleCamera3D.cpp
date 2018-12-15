@@ -100,7 +100,6 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 	else
 	{
-
 		mat4x4 matrix;
 		App->player->vehicle->GetTransform(&matrix);
 
@@ -111,7 +110,7 @@ update_status ModuleCamera3D::Update(float dt)
 		Z = vec3{ matrix[8], matrix[9],matrix[10] };
 
 		vec3 VehicleLocation = { matrix[12], matrix[13] + 7, matrix[14] };
-		Look((VehicleLocation)-Z * 15, VehicleLocation, true);
+		Look((VehicleLocation)-Z * 15, VehicleLocation, true);	
 	}
 	
 
