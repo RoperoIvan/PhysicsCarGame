@@ -19,7 +19,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 	float ShowTime();
-	void ResetCar();
+	void Restart();
 public:
 
 	PhysVehicle3D* vehicle;
@@ -27,4 +27,5 @@ public:
 	float acceleration;
 	float brake;
 	Timer playerTime;
+	
 };

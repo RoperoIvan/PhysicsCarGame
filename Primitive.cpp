@@ -156,6 +156,12 @@ void Cube::InnerRender() const
 
 	glEnd();
 }
+void Cube::Size(float x, float y, float z)
+{
+	size.x = x;
+	size.y = y;
+	size.z = z;
+}
 
 // SPHERE ============================================
 Sphere::Sphere() : Primitive(), radius(1.0f)

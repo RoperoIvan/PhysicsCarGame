@@ -20,21 +20,31 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 	/*App->audio->PlayMusic("musicandfx/song1.ogg");
 	Mix_VolumeMusic(50);*/
-
+	int circuit[39] // 1 = create a path ; 2 = create a limit path;
+	{
+		2,2,2,2,
+		2,1,1,2,
+		2,1,1,2,
+		2,1,1,2,
+		2,1,1,2,
+		2,1,1,2,
+		2,1,1,2,
+		2,1,1,2,
+		2,1,1,2,
+		2,1,1
+	};
 	for (int j = 0; j < 10; j++) {
 		for (int i = 0; i < 4; i++) {
 			CreateFloor(vec3(30, 1, 30), 30 * i, 30 * j, circuit[(4 * j) + i]);
-			/*CreateLimit(vec3(1, 1, 1), 45 * i, 45 * j, circuit[(4 * j) + i]);*/
 		}
 	}
 
-	/*cubes2.color = Yellow;*/
-	cubes2.Scale(30, 1, 30);
-	pb_cube2 = App->physics->AddBody(cubes2, 0);
-	pb_cube2->GetTransform(&cubes2.transform);
-	pb_cube2->SetPos(90, 0, 270);
-	pb_cube2->SetAsSensor(true);
-	pb_cube2->collision_listeners.add(this);
+	sensor_victory.Size(30, 1, 30);
+	pb_victory = App->physics->AddBody(sensor_victory, 0);
+	pb_victory->SetPos(90, 0, 270);
+	pb_victory->GetTransform(&sensor_victory.transform);
+	pb_victory->SetAsSensor(true);
+	pb_victory->collision_listeners.add(this);
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
@@ -55,11 +65,6 @@ bool ModuleSceneIntro::CleanUp()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
-	/*Plane p(0, 1, 0, 0);
-	p.color = Yellow;
-	p.axis = true;
-	p.Render();*/
-
 	if (pb_cubes.Count() != 0 && s_cubes.Count() != 0 && s_cubes.Count() == pb_cubes.Count()) {
 		for (int i = 0; i < s_cubes.Count(); i++) {
 			pb_cubes[i]->GetTransform(&s_cubes[i].transform);
@@ -67,26 +72,33 @@ update_status ModuleSceneIntro::Update(float dt)
 		}
 
 	}
-	/*if (pb_cylinders.Count() != 0 && s_cylinders.Count() != 0 && s_cylinders.Count() == pb_cylinders.Count()) {
-		for (int i = 0; i < s_cylinders.Count(); i++) {
-			pb_cylinders[i]->GetTransform(&s_cylinders[i].transform);
-			s_cylinders[i].Render();
+
+	if (pb_limits.Count() != 0 && s_limits.Count() != 0 && s_limits.Count() == pb_limits.Count()) {
+		for (int i = 0; i < s_limits.Count(); i++) {
+			pb_limits[i]->GetTransform(&s_limits[i].transform);
+			pb_limits[i]->SetAsSensor(true);
+			pb_limits[i]->collision_listeners.add(this);
 		}
 
-	}*/
-
-	/*pb_cube2->GetTransform(&cubes2.transform);*/
-	//cubes2.Render();
-
+	}
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
-	if (body1 == pb_cube2 || body2 == pb_cube2)
+
+if ((body1 == pb_victory) || (body2 == pb_victory))
+{
+	App->player->Restart();
+}
+for (int i = 0; i < s_limits.Count(); i++)
+{
+	if ((body1 == pb_limits[i]) || (body2 == pb_limits[i]))
 	{
-		LOG("HOLA");
+		App->player->Restart();
 	}
+}
+
 	
 }
 void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
@@ -96,15 +108,11 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 	Cube cubes2;
 	PhysBody3D* pb_cube2;
-	
-	cubes2.color = Yellow;
-	cubes2.SetRotation(-15, vec3(1, 0,0));
-	
 
 	switch (cir)
 	{
 	case 1:
-		cubes.Scale(scale.x, scale.y, scale.z);
+		cubes.Size(scale.x, scale.y, scale.z);
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
 		pb_cube->SetPos(posX, 0, posZ);
@@ -112,10 +120,14 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		
 		break;
 	case 2:
-		
+		cubes2.Size(scale.x, scale.y, scale.z);
+		s_limits.PushBack(cubes2);
+		pb_cube2 = App->physics->AddBody(cubes2, 0);
+		pb_cube2->SetPos(posX, 0, posZ);
+		pb_limits.PushBack(pb_cube2);		
 		break;
 	case 3:	
-		cubes2.Scale(scale.x, scale.y, scale.z);
+		cubes2.Size(scale.x, scale.y, scale.z);
 		s_cubes.PushBack(cubes2);
 		pb_cube2 = App->physics->AddBody(cubes2, 0);
 		pb_cube2->SetPos(posX, 0, posZ);
@@ -124,29 +136,5 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		break;
 	default:
 		break;
-	}
-
-	    
-	
+	}	
 }
-//
-//void ModuleSceneIntro::CreateLimit(vec3 scale, int posX, int posZ, int lim)
-//{
-//	Cylinder cylinder;
-//	cylinder.SetRotation(90, vec3(posX, 1, posZ));
-//	PhysBody3D* pb_cylinder;
-//	switch (lim)
-//	{
-//	case 1:
-//		cylinder.Scale(scale.x, scale.y,scale.z);
-//		s_cylinders.PushBack(cylinder);
-//		pb_cylinder = App->physics->AddBody(cylinder, 0);
-//		pb_cylinder->SetPos(posX, 1, posZ);
-//		pb_cylinders.PushBack(pb_cylinder);
-//		break;
-//	case 2:
-//		break;
-//	default:
-//		break;
-//	}
-//}
