@@ -65,7 +65,6 @@ bool ModulePhysics3D::Start()
 		btRigidBody* body = new btRigidBody(rbInfo);
 		world->addRigidBody(body);
 	}
-
 	return true;
 }
 
@@ -118,7 +117,6 @@ update_status ModulePhysics3D::Update(float dt)
 	if(debug == true)
 	{
 		world->debugDrawWorld();
-
 		// Render vehicles
 		p2List_item<PhysVehicle3D*>* item = vehicles.getFirst();
 		while(item)
@@ -127,13 +125,13 @@ update_status ModulePhysics3D::Update(float dt)
 			item = item->next;
 		}
 
-		if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	/*	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 		{
 			Sphere s(1);
 			s.SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 			float force = 30.0f;
 			AddBody(s)->Push(-(App->camera->Z.x * force), -(App->camera->Z.y * force), -(App->camera->Z.z * force));
-		}
+		}*/
 	}
 
 	return UPDATE_CONTINUE;
@@ -354,11 +352,26 @@ void ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, c
 		btVector3(anchorB.x, anchorB.y, anchorB.z),
 		btVector3(axisA.x, axisA.y, axisA.z), 
 		btVector3(axisB.x, axisB.y, axisB.z));
-
+	/*hinge->enableAngularMotor(true, 4, 100);*/
 	world->addConstraint(hinge, disable_collision);
 	constraints.add(hinge);
+
 	hinge->setDbgDrawSize(2.0f);
 }
+
+void ModulePhysics3D::AddConstraintSlider(PhysBody3D & bodyA, bool disable_collision)
+{
+	btTransform axis;
+	axis.setIdentity();
+	axis.setRotation(btQuaternion(0, 0, 1, 1));
+	btSliderConstraint* slider = new btSliderConstraint(*(bodyA.body), axis, true);
+	/*slider->setMaxLinMotorForce(30);*/
+	world->addConstraint(slider, disable_collision);
+	slider->setLowerLinLimit(-15);
+	slider->setUpperLinLimit(15);
+	constraints.add(slider);
+}
+
 
 // =============================================
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)

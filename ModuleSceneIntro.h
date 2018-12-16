@@ -24,6 +24,7 @@ public:
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 	void CreateFloor(vec3 scale, int posX, int posZ, int cir);
 	void Painting();
+
 public:
 	/*
 	PhysBody3D* pb_snake[MAX_SNAKE];
@@ -32,7 +33,7 @@ public:
 	PhysBody3D* pb_snake2[MAX_SNAKE];
 	Sphere s_snake2[MAX_SNAKE];
 	*/
-	
+
 	p2DynArray<PhysBody3D*> pb_cubes;
 	p2DynArray<Cube>s_cubes;
 
@@ -56,5 +57,6 @@ public:
 
 	Timer reset;
 	bool win = true;
-
+	Sphere chain[5];
+	PhysBody3D* pb_chain[5];
 };
