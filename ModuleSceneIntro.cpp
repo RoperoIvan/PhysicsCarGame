@@ -20,7 +20,7 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 	/*App->audio->PlayMusic("musicandfx/song1.ogg");
 	Mix_VolumeMusic(50);*/
-	int circuit[40] // 1 = create a path ; 2 = create a limit path;
+	int circuit[40] // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 5 = create an obstacle;
 	{
 		2,2,2,2,
 		2,1,1,2,
@@ -41,7 +41,7 @@ bool ModuleSceneIntro::Start()
 	sensor_victory.color = Yellow;
 	sensor_victory.Size(15, 1, 30);
 	pb_victory = App->physics->AddBody(sensor_victory, 0);
-	pb_victory->SetPos(90, 1, 270);
+	pb_victory->SetPos(90, 2, 270);
 	pb_victory->GetTransform(&sensor_victory.transform);
 	pb_victory->SetAsSensor(true);
 	pb_victory->collision_listeners.add(this);
@@ -68,7 +68,6 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
 	return true;
 }
 
@@ -126,7 +125,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		cubes.Size(scale.x, scale.y, scale.z);
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
-		pb_cube->SetPos(posX, 0, posZ);
+		pb_cube->SetPos(posX, 1, posZ);
 		pb_cubes.PushBack(pb_cube);
 		
 		break;
@@ -135,35 +134,29 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		cubes2.Size(scale.x, scale.y, scale.z);
 		s_limits.PushBack(cubes2);
 		pb_cube2 = App->physics->AddBody(cubes2, 0);
-		pb_cube2->SetPos(posX, 0, posZ);
+		pb_cube2->SetPos(posX, 1, posZ);
 		pb_limits.PushBack(pb_cube2);		
 		break;
 	case 3:	
 		//Flag
-		cubes2.Size(scale.x, scale.y, scale.z);
-		s_cubes.PushBack(cubes2);
-		pb_cube2 = App->physics->AddBody(cubes2, 0);
-		pb_cube2->SetPos(posX, 0, posZ);
-		pb_cubes.PushBack(pb_cube2);
 		LOG("%i, %i", posX, posZ);
 		break;
 	case 4:
 		//Floor
 		cubes.Size(scale.x, scale.y, scale.z);
-		cubes.color = Green;
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
-		pb_cube->SetPos(posX, 0, posZ);
+		pb_cube->SetPos(posX, 1, posZ);
 		pb_cubes.PushBack(pb_cube);
 		
 		//Slider
-		cubes.Size(scale.x, 7, scale.y);
-		cubes.color = Red;
+		cubes.Size(scale.x, 8, scale.y);
+		cubes.color = Green;
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 100);
 	
-		pb_cube->SetPos(posX, 13.5, posZ);
-		App->physics->AddConstraintSlider(*pb_cube, true);
+		pb_cube->SetPos(posX, 14.5, posZ);
+		App->physics->AddConstraintSlider(*pb_cube, false);
 		pb_cubes.PushBack(pb_cube);
 		break;
 	case 5:
@@ -171,11 +164,11 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		cubes.Size(scale.x, scale.y, scale.z);
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
-		pb_cube->SetPos(posX,0, posZ);
+		pb_cube->SetPos(posX,1, posZ);
 		pb_cubes.PushBack(pb_cube);
 
 		//Obstacle
-		cubes.Size(15, 7, 2);	
+		cubes.Size(15, 8, 2);	
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
 		pb_cube->SetPos(posX, 3, posZ);
@@ -188,6 +181,10 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 void ModuleSceneIntro::Painting()
 {
+	Cube* floor_cube = new Cube(2500.0f, 0.0f, 2500.0f);
+	floor_cube->color = Green;
+	floor_cube->Render();
+
 	if (pb_cubes.Count() != 0 && s_cubes.Count() != 0 && s_cubes.Count() == pb_cubes.Count()) 
 	{
 		for (int i = 0; i < s_cubes.Count(); i++) {
@@ -204,7 +201,6 @@ void ModuleSceneIntro::Painting()
 			pb_limits[i]->SetAsSensor(true);
 			pb_limits[i]->collision_listeners.add(this);
 		}
-		/*sensor_victory.Render();*/
 	}
 	for (int i = 0; i < 5; i++)
 	{

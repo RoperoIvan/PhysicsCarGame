@@ -25,7 +25,7 @@ public:
 	void SetScore();
 	void Stop();
 public:
-
+	
 	PhysVehicle3D* vehicle;
 	float turn;
 	float acceleration;
