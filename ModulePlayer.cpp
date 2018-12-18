@@ -112,7 +112,8 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 
 	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(30, 2, 30);
+	Restart();
+	
 	/*vehicle->collision_listeners.add(this);*/
 	return true;
 }
@@ -180,7 +181,16 @@ void ModulePlayer::Restart()
 		mat4x4 matrix;
 		vehicle->SetTransform(matrix.M);
 		Stop();
-		vehicle->SetPos(30, 2, 30);
+		for (int i = 0; i < 70; ++i)
+		{
+			if (App->scene_intro->circuit[i] == 1)
+			{
+				int j = i / 7 * 30;
+				int q = i % 7 * 30;
+				vehicle->SetPos(q, 2, j);
+				break;
+			}
+		}
 }
 
 void ModulePlayer::WinAchieved()
