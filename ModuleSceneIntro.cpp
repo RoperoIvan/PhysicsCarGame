@@ -21,12 +21,21 @@ bool ModuleSceneIntro::Start()
 	/*App->audio->PlayMusic("musicandfx/song1.ogg");
 	Mix_VolumeMusic(50);*/
 	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 5 = create an obstacle;
-	
-	for (int j = 0; j < 10; j++) {
-		for (int i = 0; i < 7; i++) {
-			CreateFloor(vec3(30, 1, 30), 30 * i, 30 * j, circuit[(7 * j) + i]);
-		}
-	}
+	int circuit1[70]{
+		2,2,2,1,2,2,2,
+		2,2,2,7,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,1,1,1,2,2,
+		2,2,1,7,6,2,2,
+		2,2,5,7,5,2,2,
+		2,2,1,7,1,2,2,
+		2,2,1,7,1,2,2,
+		2,2,1,5,1,2,2,
+		2,2,2,1,2,2,2,
+	};
+	//load circuit1, only for 7-column circuits
+	LoadCircuit(circuit, circuit1);
+
 	sensor_victory.color = Yellow;
 	sensor_victory.Size(30, 1, 15);
 	pb_victory = App->physics->AddBody(sensor_victory, 0);
@@ -237,6 +246,29 @@ void ModuleSceneIntro::Painting()
 	{
 		pb_chain[i]->GetTransform(&(chain[i].transform));
 		chain[i].Render();
+	}
+}
+
+int ModuleSceneIntro::Size(int * vec)
+{
+	int count = 0;
+		for (int i = 0; vec[i] <= 7 && vec[i] >= 1; ++i)
+		{
+			count++;
+		}
+	return count;
+}
+
+void ModuleSceneIntro::LoadCircuit(int * lvlcircuit, int * circuitx)
+{
+	for (int i = 0; i < Size(circuitx); ++i)
+	{
+		lvlcircuit[i] = circuitx[i];
+	}
+	for (int j = 0; j < 10; j++) {
+		for (int i = 0; i < 7; i++) {
+			CreateFloor(vec3(30, 1, 30), 30 * i, 30 * j, circuit[(7 * j) + i]);
+		}
 	}
 }
 
