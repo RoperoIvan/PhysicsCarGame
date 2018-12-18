@@ -27,6 +27,7 @@ private:
 	bool is_sensor = false;
 public:
 	p2List<Module*> collision_listeners;
+	bool paiting = true;
 };
 
 #endif // __PhysBody3D_H__
