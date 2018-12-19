@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "ModulePlayer.h"
-//#include "ModuleAudio.h"
+#include "ModuleAudio.h"
 #include "Primitive.h"
 #include "PhysBody3D.h" 
 
@@ -18,8 +18,8 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
-	/*App->audio->PlayMusic("musicandfx/song1.ogg");
-	Mix_VolumeMusic(50);*/
+	App->audio->PlayMusic("musicandfx/song.ogg");
+	Mix_VolumeMusic(50);
 	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 5 = create an obstacle;
 	int circuit1[70]{
 		2,2,2,1,2,2,2,
@@ -31,26 +31,12 @@ bool ModuleSceneIntro::Start()
 		2,2,1,7,1,2,2,
 		2,2,1,7,1,2,2,
 		2,2,1,5,1,2,2,
-		2,2,2,1,2,2,2,
+		2,2,2,8,2,2,2,
 	};
 	//load circuit1, only for 7-column circuits
 	LoadCircuit(circuit, circuit1);
-	if (pb_limits.Count() != 0 && s_limits.Count() != 0 && s_limits.Count() == pb_limits.Count())
-	{
-	for (int i = 0; i < s_limits.Count(); i++) 
-	{
-	pb_limits[i]->SetAsSensor(true);
-	pb_limits[i]->collision_listeners.add(this);
-	}
-	}
-	sensor_victory.color = Yellow;
-	sensor_victory.Size(30, 1, 15);
-	pb_victory = App->physics->AddBody(sensor_victory, 0);
-	pb_victory->SetPos(0, 0, 0);
-	pb_victory->GetTransform(&sensor_victory.transform);
-	pb_victory->SetAsSensor(true);
-	pb_victory->collision_listeners.add(this);
-
+	
+	
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	/*float size = 2.0f;
@@ -65,21 +51,6 @@ bool ModuleSceneIntro::Start()
 		}
 		
 	}*/
-
-	for (int i = 0; i < 70; ++i)
-	{
-		for (int i = 0; i < 70; ++i)
-		{
-			if (circuit[i] == 1)
-			{
-				int j = i / 7 * 30;
-				int q = i % 7 * 30;
-				pb_victory->SetPos(q, 3, j);
-			}
-		}
-	}
-
-	
 	return ret;
 }
 
@@ -168,6 +139,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
 		pb_cube->SetPos(posX, 1, posZ);
+		pb_cube->paiting = true;
 		pb_cubes.PushBack(pb_cube);
 		
 		//Slider
@@ -187,6 +159,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
 		pb_cube->SetPos(posX,1, posZ);
+		pb_cube->paiting = true;
 		pb_cubes.PushBack(pb_cube);
 
 		//Obstacle
@@ -223,6 +196,23 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->SetPos(posX, 1, posZ);
 		pb_cube->paiting = false;
 		pb_cubes.PushBack(pb_cube);
+		break;
+	case 8:
+		//floor
+		cubes.Size(scale.x, scale.y, scale.z);
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 1, posZ);
+		pb_cube->paiting = true;
+		pb_cubes.PushBack(pb_cube);
+
+		//victory sensor
+		sensor_victory.Size(30, 1, 15);
+		pb_victory = App->physics->AddBody(sensor_victory, 0);
+		pb_victory->SetPos(posX, 3, posZ);
+		pb_victory->GetTransform(&sensor_victory.transform);
+		pb_victory->SetAsSensor(true);
+		pb_victory->collision_listeners.add(this);
 
 	default:
 		break;
@@ -250,12 +240,13 @@ void ModuleSceneIntro::Painting()
 		chain[i].Render();
 	}*/
 	delete floor_cube;
+	floor_cube = nullptr;
 }
 
 int ModuleSceneIntro::Size(int * vec)
 {
 	int count = 0;
-		for (int i = 0; vec[i] <= 7 && vec[i] >= 1; ++i)
+		for (int i = 0; vec[i] <= 8 && vec[i] >= 1; ++i)
 		{
 			count++;
 		}
@@ -271,6 +262,15 @@ void ModuleSceneIntro::LoadCircuit(int * lvlcircuit, int * circuitx)
 	for (int j = 0; j < 10; j++) {
 		for (int i = 0; i < 7; i++) {
 			CreateFloor(vec3(30, 1, 30), 30 * i, 30 * j, circuit[(7 * j) + i]);
+		}
+	}
+
+	if (pb_limits.Count() != 0 && s_limits.Count() != 0 && s_limits.Count() == pb_limits.Count())
+	{
+		for (int i = 0; i < s_limits.Count(); i++)
+		{
+			pb_limits[i]->SetAsSensor(true);
+			pb_limits[i]->collision_listeners.add(this);
 		}
 	}
 }
