@@ -328,6 +328,11 @@ public:
 			m_angularVelocity += m_invInertiaTensorWorld * torque * m_angularFactor;
 	}
 	
+	void SetAngularVelocity(const btVector3& angular_vel)
+	{
+		m_angularVelocity = m_invInertiaTensorWorld * angular_vel * m_angularFactor;
+	}
+
 	void applyImpulse(const btVector3& impulse, const btVector3& rel_pos) 
 	{
 		if (m_inverseMass != btScalar(0.))

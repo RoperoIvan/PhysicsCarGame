@@ -61,6 +61,9 @@ public:
 	Timer reset;
 	bool win = true;
 	int circuit[MAX_CIRCUITSIZE];
-	Sphere chain[5];
-	PhysBody3D* pb_chain[5];
+	Sphere chain;
+	Cube leftstick, rightstick, pole;
+	PhysBody3D* pb_chain, *pb_leftstick, *pb_rightstick, *pb_pole;
+
+
 };

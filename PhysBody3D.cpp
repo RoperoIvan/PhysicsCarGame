@@ -72,3 +72,8 @@ btRigidBody * PhysBody3D::GetBody()
 {
 	return body;
 }
+
+void PhysBody3D::SetAngularVelocity(float x, float y, float z)
+{
+	body->SetAngularVelocity(btVector3(x, y, z));
+}

@@ -19,16 +19,16 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 	App->audio->PlayMusic("musicandfx/song.ogg");
-	Mix_VolumeMusic(50);
-	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 5 = create an obstacle;
+	Mix_VolumeMusic(0);
+	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 5 = create an obstacle; 6 = create a trap; 7 create an invisible road; 8 set the win condition
 	int circuit1[70]{
 		2,2,2,8,2,2,2,
-		2,2,2,1,2,2,2,
-		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
-		2,2,1,7,6,2,2,
+		2,2,1,1,1,2,2,
+		2,2,1,1,1,2,2,
+		2,2,6,7,6,2,2,
 		2,2,5,7,5,2,2,
-		2,2,1,7,1,2,2,
+		2,2,1,4,1,2,2,
 		2,2,1,7,1,2,2,
 		2,2,1,5,1,2,2,
 		2,2,2,1,2,2,2,
@@ -36,23 +36,35 @@ bool ModuleSceneIntro::Start()
 	//load circuit1, only for 7-column circuits
 	for (int i = 0; i < 5; ++i)
 	{
-		LoadCircuit(circuit, circuit1,i);
+		LoadCircuit(circuit, circuit1, i);
 	}
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
-	/*float size = 2.0f;
-	for(int i = 0; i < 5; i++)
-	{
-		chain[i].radius = size;
-		chain[i].SetPos(40 + (size * (i + 1)) + (size * i), 10.f, 40);
-		pb_chain[i] = App->physics->AddBody(chain[i]);
-		if (i > 0)
-		{
-			App->physics->AddConstraintHinge(*pb_chain[i], *pb_chain[i - 1], vec3(-2*size, 0, 0), vec3(0, 0, 0), vec3(0, 1, 0), vec3(0, 1, 0));
-		}
-		
-	}*/
+	float size = 2.0f;
+	
+	//chain.radius = size;
+	//chain.SetPos(90, 10.f, 60);
+	//pb_chain = App->physics->AddBody(chain);
+	///*pb_chain->SetAngularVelocity(0,20,0);*/
+
+	///*pole.Size(2,80,2);
+	//pole.SetPos(90 - size - 2,10-size,60);
+	//pb_pole = App->physics->AddBody(pole);
+	//leftstick.Size(50, 2, 4);
+	//leftstick.SetPos(90,10 + (size*0.5 + 50 * 0.5),60);
+	//pb_leftstick = App->physics->AddBody(leftstick);
+	//pb_leftstick->SetAngularVelocity(0, 20, 0);
+	//rightstick.Size(50, 2, 4);
+	//rightstick.SetPos(90, 10 - (size*0.5 + 50 * 0.5), 60);
+	//pb_rightstick = App->physics->AddBody(rightstick);
+	//pb_rightstick->SetAngularVelocity(0, 20, 0);*/
+
+
+	//App->physics->AddConstraintHinge(pb_pole, pb_chain, vec3(size*2.5, 0, 0), vec3(0, 0, 0), vec3(1, 0, 0), vec3(1, 0, 0));
+	//App->physics->AddConstraintHinge(pb_chain, pb_leftstick, vec3(0, (size*0.5 + 50 * 0.5) + 3, 0) , vec3(0, 0, 0), vec3(0, 1, 0), vec3(1, 0, 0));
+	//App->physics->AddConstraintHinge(pb_chain, pb_rightstick, vec3(0, -(size*0.5 + 50 * 0.5) - 3, 0), vec3(0, 0, 0), vec3(0, 1, 0), vec3(1, 0, 0));
+
 	return ret;
 }
 
@@ -151,6 +163,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube = App->physics->AddBody(cubes, 100);
 	
 		pb_cube->SetPos(posX, 14.5, posZ);
+		pb_cube->SetAngularVelocity(0, 2000, 0);
 		App->physics->AddConstraintSlider(*pb_cube, false);
 		pb_cube->paiting = true;
 		pb_cubes.PushBack(pb_cube);
@@ -215,7 +228,16 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_victory->GetTransform(&sensor_victory.transform);
 		pb_victory->SetAsSensor(true);
 		pb_victory->collision_listeners.add(this);
-
+		break;
+	case 9:
+		cubes.Size(2, 80, 2);
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 3, posZ);
+		pb_cube->paiting = true;
+		pb_cube->SetAngularVelocity(2000, 0, 0);
+		pb_cubes.PushBack(pb_cube);
+		break;
 	default:
 		break;
 	}	
@@ -236,19 +258,25 @@ void ModuleSceneIntro::Painting()
 		}
 
 	}
-	/*for (int i = 0; i < 5; i++)
-	{
-		pb_chain[i]->GetTransform(&(chain[i].transform));
-		chain[i].Render();
-	}*/
-	delete floor_cube;
+
+		/*pb_chain->GetTransform(&(chain.transform));
+		chain.Render();
+		pb_pole->GetTransform(&(pole.transform));
+		pole.Render();
+		pb_leftstick->GetTransform(&(leftstick.transform));
+		leftstick.Render();
+		pb_rightstick->GetTransform(&(rightstick.transform));
+		rightstick.Render();*/
+
+
+		delete floor_cube;
 	floor_cube = nullptr;
 }
 
 int ModuleSceneIntro::Size(int * vec)
 {
 	int count = 0;
-		for (int i = 0; vec[i] <= 8 && vec[i] >= 1; ++i)
+		for (int i = 0; vec[i] <= 9 && vec[i] >= 1; ++i)
 		{
 			count++;
 		}
