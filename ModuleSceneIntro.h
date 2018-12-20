@@ -43,6 +43,9 @@ public:
 	p2DynArray<PhysBody3D*> pb_limits;
 	p2DynArray<Cube>s_limits;
 
+	p2DynArray<PhysBody3D*> pb_endlvl;
+	p2DynArray<Cube>s_endlvl;
+
 	PhysBody3D* pb_chassis;
 	Cube p_chassis;
 
@@ -58,12 +61,14 @@ public:
 	PhysBody3D* pb_victory;
 	Cube sensor_victory;
 
+
 	Timer reset;
 	bool win = true;
 	int circuit[MAX_CIRCUITSIZE];
 	Sphere chain;
 	Cube leftstick, rightstick, pole;
 	PhysBody3D* pb_chain, *pb_leftstick, *pb_rightstick, *pb_pole;
+	int count = 0;
 
 
 };

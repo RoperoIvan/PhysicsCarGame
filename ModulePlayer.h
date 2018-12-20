@@ -19,7 +19,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 	float ShowTime();
-	void Restart();
+	void Restart(int map);
 	void WinAchieved();
 	void UI(bool reset);
 	void SetScore();
@@ -33,6 +33,7 @@ public:
 	float bestTime = 0.0f;
 	Timer playerTime;
 	bool controls = true, reset = false;
+	int Nmap = 0;
 
 
 };

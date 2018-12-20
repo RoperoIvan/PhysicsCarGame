@@ -112,7 +112,7 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 
 	vehicle = App->physics->AddVehicle(car);
-	Restart();
+	Restart(Nmap);
 	
 	/*vehicle->collision_listeners.add(this);*/
 	return true;
@@ -133,6 +133,7 @@ update_status ModulePlayer::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT && controls)
 	{
 		acceleration = MAX_ACCELERATION;
+		App->scene_intro->count = 0;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && controls)
@@ -158,7 +159,7 @@ update_status ModulePlayer::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
 		playerTime.Start();
-		Restart();
+		Restart(Nmap);
 	}
 
 	vehicle->ApplyEngineForce(acceleration);
@@ -175,27 +176,30 @@ float ModulePlayer::ShowTime()
 	return playerTime.Read() / 1000;
 }
 
-void ModulePlayer::Restart()
+void ModulePlayer::Restart(int map)
 {
 		mat4x4 matrix;
 		vehicle->SetTransform(matrix.M);
 		Stop();
 		for (int i = 0; i < 70; ++i)
 		{
+
 			if (App->scene_intro->circuit[i] == 1)
 			{
 				int j = i / 7 * 30;
-				int q = i % 7 * 30;
+				int q = (i % 7 * 30) + map*(8*30);
 				vehicle->SetPos(q, 2, j);
 				break;
 			}
+			
+			
 		}
 }
 
 void ModulePlayer::WinAchieved()
 {
 	SetScore();
-	Restart();	
+	Restart(Nmap);	
 	playerTime.Start();
 	App->scene_intro->win = true;
 	controls = true;
