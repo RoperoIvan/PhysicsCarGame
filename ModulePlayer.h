@@ -22,7 +22,7 @@ public:
 	float ShowTime();
 	void Restart(int map);
 	void WinAchieved();
-	void UI(bool reset);
+	void UI(int reset);
 	void SetScore();
 	void Stop();
 
@@ -35,8 +35,10 @@ public:
 	float brake;
 	float bestTime = 0.0f;
 	Timer playerTime;
-	bool controls = true, reset = false;
+	bool controls = true;
+	bool clue = false;
 	int Nmap = 0;
+	int reset = 0;
 
 
 };

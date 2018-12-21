@@ -27,10 +27,10 @@ bool ModuleSceneIntro::Start()
 	int circuit1[70]{
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
-		2,2,1,4,1,2,2,
-		2,2,1,2,1,2,2,
 		2,2,1,1,1,2,2,
-		2,2,5,2,5,2,2,
+		2,2,10,2,1,2,2,
+		2,2,12,2,10,2,2,
+		2,2,1,2,4,2,2,
 		2,2,1,2,1,2,2,
 		2,2,1,1,1,2,2,
 		2,2,2,9,2,2,2,
@@ -105,6 +105,7 @@ bool ModuleSceneIntro::Start()
 	}
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
+	lvltime.Start();
 	return ret;
 }
 
@@ -119,6 +120,10 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 	Painting();
+	if (lvltime.Read() / 1000 >= 10)
+	{
+		App->player->clue = true;
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -134,7 +139,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			reset.Start();
 			win = false;
 			App->player->controls = false;
-			App->player->reset = true;
+			App->player->reset = 5;
 			App->player->Stop();
 		}	
 		if (reset.Read() >= 5000)
@@ -158,6 +163,9 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 		{
 			if (count == 0)
 			{
+				lvltime.Start();
+				App->player->clue = false;
+				App->player->reset++;
 				App->player->Nmap++;
 				App->player->Restart(App->player->Nmap);
 				count++;
@@ -201,13 +209,14 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		break;
 	case 4:
 		//Floor
-		cubes.Size(scale.x, scale.y, scale.z);
+		cubes.Size(scale.x, scale.y, 15);
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
-		pb_cube->SetPos(posX, 1, posZ);
+		pb_cube->SetPos(posX, 1, posZ+15);
 		pb_cube->paiting = true;
 		pb_cubes.PushBack(pb_cube);
 		
+
 		//Slider
 		cubes.Size(scale.x, 8, scale.y);
 		cubes.color = Green;
@@ -307,7 +316,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		break;
 
 	case 10:
-		//ramp
+		//ramp begin
 		cubes.Size(scale.x, scale.y, scale.z-15);
 		cubes.SetRotation(-15, vec3(1, 0, 0));
 		s_cubes.PushBack(cubes);
@@ -325,6 +334,17 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->paiting = true;
 		pb_cubes.PushBack(pb_cube);
 
+		break;
+
+	case 12:
+		//ramp end
+		cubes.Size(scale.x, scale.y, scale.z - 15);
+		cubes.SetRotation(15, vec3(1, 0, 0));
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 3, posZ);
+		pb_cube->paiting = true;
+		pb_cubes.PushBack(pb_cube);
 		break;
 	default:
 		break;
@@ -376,7 +396,7 @@ void ModuleSceneIntro::Painting()
 int ModuleSceneIntro::Size(int * vec)
 {
 	int count = 0;
-		for (int i = 0; vec[i] <= 11 && vec[i] >= 1; ++i)
+		for (int i = 0; vec[i] <= 12 && vec[i] >= 1; ++i)
 		{
 			count++;
 		}

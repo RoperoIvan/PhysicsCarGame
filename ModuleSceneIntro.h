@@ -54,7 +54,7 @@ public:
 	Cube sensor_victory;
 
 
-	Timer reset;
+	Timer reset, lvltime;
 	bool win = true;
 	bool move = true;
 	int count2 = 0;
