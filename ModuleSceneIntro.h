@@ -4,7 +4,6 @@
 #include "Globals.h"
 #include "Primitive.h"
 
-#define MAX_SNAKE 2
 #define MAX_CIRCUITSIZE 300
 
 struct PhysBody3D;
@@ -29,14 +28,7 @@ public:
 	void LoadCircuit(int* lvlcircuit, int* circuitx, int poscircuit);
 
 public:
-	/*
-	PhysBody3D* pb_snake[MAX_SNAKE];
-	Sphere s_snake[MAX_SNAKE];
-
-	PhysBody3D* pb_snake2[MAX_SNAKE];
-	Sphere s_snake2[MAX_SNAKE];
-	*/
-
+	
 	p2DynArray<PhysBody3D*> pb_cubes;
 	p2DynArray<Cube>s_cubes;
 
@@ -64,17 +56,11 @@ public:
 
 	Timer reset;
 	bool win = true;
-	bool first = true;
 	bool move = true;
-	
 	int count2 = 0;
 	int count3 = 0;
 	int circuit[MAX_CIRCUITSIZE];
 	Sphere chain;
-	Cube leftstick, rightstick, pole;
-	PhysBody3D* pb_chain, *pb_leftstick, *pb_rightstick, *pb_pole;
+	Cube  rightstick;
 	int count = 0;
-	Cube* slid = new Cube(30, 8, 1);
-	PhysBody3D* pb_slider;
-
 };

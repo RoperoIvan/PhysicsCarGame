@@ -27,9 +27,9 @@ bool ModuleSceneIntro::Start()
 	int circuit1[70]{
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
-		2,2,1,1,1,2,2,
+		2,2,1,4,1,2,2,
 		2,2,1,2,1,2,2,
-		2,2,1,3,6,2,2,
+		2,2,1,1,1,2,2,
 		2,2,5,2,5,2,2,
 		2,2,1,2,1,2,2,
 		2,2,1,1,1,2,2,
@@ -103,33 +103,8 @@ bool ModuleSceneIntro::Start()
 			LoadCircuit(circuit, circuit5, i);
 
 	}
-
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
-	float size = 2.0f;
-
-	//chain.radius = size;
-	//chain.SetPos(90, 10.f, 60);
-	//pb_chain = App->physics->AddBody(chain);
-	///*pb_chain->SetAngularVelocity(0,20,0);*/
-
-	///*pole.Size(2,80,2);
-	//pole.SetPos(90 - size - 2,10-size,60);
-	//pb_pole = App->physics->AddBody(pole);
-	//leftstick.Size(50, 2, 4);
-	//leftstick.SetPos(90,10 + (size*0.5 + 50 * 0.5),60);
-	//pb_leftstick = App->physics->AddBody(leftstick);
-	//pb_leftstick->SetAngularVelocity(0, 20, 0);
-	//rightstick.Size(50, 2, 4);
-	//rightstick.SetPos(90, 10 - (size*0.5 + 50 * 0.5), 60);
-	//pb_rightstick = App->physics->AddBody(rightstick);
-	//pb_rightstick->SetAngularVelocity(0, 20, 0);*/
-
-
-	//App->physics->AddConstraintHinge(pb_pole, pb_chain, vec3(size*2.5, 0, 0), vec3(0, 0, 0), vec3(1, 0, 0), vec3(1, 0, 0));
-	//App->physics->AddConstraintHinge(pb_chain, pb_leftstick, vec3(0, (size*0.5 + 50 * 0.5) + 3, 0) , vec3(0, 0, 0), vec3(0, 1, 0), vec3(1, 0, 0));
-	//App->physics->AddConstraintHinge(pb_chain, pb_rightstick, vec3(0, -(size*0.5 + 50 * 0.5) - 3, 0), vec3(0, 0, 0), vec3(0, 1, 0), vec3(1, 0, 0));
-
 	return ret;
 }
 
@@ -143,35 +118,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
-	if (first)
-	{
-
-		slid->color = Green;
-		pb_slider = App->physics->AddBody(*slid, 100);
-		pb_slider->SetPos(90, 14.5, 120);
-		App->physics->AddConstraintSlider(*pb_slider, false);
-		first = false;
-	}
-
-	if (move)
-	{
-		count3 = 0;
-		pb_slider->GetBody()->applyCentralImpulse(btVector3(0, 500, 0));
-		count2++;
-	}
-	if (count2 >= 50)
-	{
-		move = false;
-		pb_slider->GetBody()->applyCentralImpulse(btVector3(0, -500, 0));
-		count3++;
-	}
-	if (count3 >= 50)
-	{
-		move = true;
-		count2 = 0;
-	}
 	Painting();
-
 	return UPDATE_CONTINUE;
 }
 
@@ -268,8 +215,8 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube = App->physics->AddBody(cubes, 100);
 	
 		pb_cube->SetPos(posX, 14.5, posZ);
-		pb_cube->SetAngularVelocity(0, 2000, 0);
 		App->physics->AddConstraintSlider(*pb_cube, false);
+		pb_cube->sliders = true;
 		pb_cube->paiting = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
@@ -395,22 +342,33 @@ void ModuleSceneIntro::Painting()
 		for (int i = 0; i < s_cubes.Count(); i++) {
 			pb_cubes[i]->GetTransform(&s_cubes[i].transform);
 			if(pb_cubes[i]->paiting == true)
+			{
 				s_cubes[i].Render();
+			}
+				
+			if (pb_cubes[i]->sliders == true)
+			{
+				if (move)
+				{
+					count3 = 0;
+					pb_cubes[i]->GetBody()->applyCentralImpulse(btVector3(0, 500, 0));
+					count2++;
+				}
+				if (count2 >= 50)
+				{
+					move = false;
+					pb_cubes[i]->GetBody()->applyCentralImpulse(btVector3(0, -500, 0));
+					count3++;
+				}
+				if (count3 >= 50)
+				{
+					move = true;
+					count2 = 0;
+				}
+			}
 		}
 
 	}
-
-		/*pb_chain->GetTransform(&(chain.transform));
-		chain.Render();
-		pb_pole->GetTransform(&(pole.transform));
-		pole.Render();
-		pb_leftstick->GetTransform(&(leftstick.transform));
-		leftstick.Render();
-		pb_rightstick->GetTransform(&(rightstick.transform));
-		rightstick.Render();*/
-
-	pb_slider->GetTransform(&(slid->transform));
-	slid->Render();
 		delete floor_cube;
 	floor_cube = nullptr;
 }
