@@ -1,4 +1,5 @@
 #include "Globals.h"
+#include <time.h> 
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "ModulePlayer.h"
@@ -20,13 +21,15 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 	App->audio->PlayMusic("musicandfx/song.ogg");
 	Mix_VolumeMusic(0);
-	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 5 = create an obstacle; 6 = create a trap; 7 create an invisible road; 8 set the win condition
+	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 
+	//5 = create an obstacle; 6 = create a trap; 7 create an invisible road; 8 set the win condition; 
+	//9 create the level changer; 10 create a ramp;
 	int circuit1[70]{
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
-		2,2,1,10,1,2,2,
-		2,2,1,7,1,2,2,
+		2,2,1,1,1,2,2,
 		2,2,1,2,1,2,2,
+		2,2,1,3,6,2,2,
 		2,2,5,2,5,2,2,
 		2,2,1,2,1,2,2,
 		2,2,1,1,1,2,2,
@@ -39,7 +42,7 @@ bool ModuleSceneIntro::Start()
 		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
 		2,2,1,7,1,2,2,
-		2,2,6,2,1,2,2,
+		11,2,6,2,1,2,2,
 		2,2,5,2,5,2,2,
 		2,2,1,2,1,2,2,
 		2,2,1,1,1,2,2,
@@ -52,7 +55,7 @@ bool ModuleSceneIntro::Start()
 		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
 		2,2,1,7,1,2,2,
-		2,2,6,7,6,2,2,
+		11,2,6,7,6,2,2,
 		2,2,5,7,5,2,2,
 		2,2,1,7,1,2,2,
 		2,2,1,1,1,2,2,
@@ -65,7 +68,7 @@ bool ModuleSceneIntro::Start()
 		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
 		2,7,1,2,1,7,2,
-		2,7,6,2,6,7,2,
+		11,7,6,2,6,7,2,
 		2,7,5,2,5,7,2,
 		2,2,1,2,1,2,2,
 		2,2,1,1,1,2,2,
@@ -75,14 +78,14 @@ bool ModuleSceneIntro::Start()
 
 	int circuit5[70]{
 		2,2,2,2,2,2,2,
-		2,2,2,1,2,2,2,
-		2,2,1,1,1,2,2,
-		2,2,1,2,1,2,2,
-		2,2,6,2,6,2,2,
-		2,2,5,2,5,2,2,
-		2,2,1,2,1,2,2,
-		2,2,1,1,1,2,2,
-		2,2,2,8,2,2,2,
+		2,2,2,1,1,1,2,
+		2,2,2,2,2,1,2,
+		2,1,1,1,1,1,2,
+		11,1,2,2,2,2,2,
+		2,1,1,1,1,1,2,
+		2,2,2,2,2,1,2,
+		2,2,1,1,1,1,2,
+		2,8,1,2,2,2,2,
 		2,2,2,2,2,2,2,
 	};
 	//load circuit, only for 7-column circuits
@@ -98,13 +101,13 @@ bool ModuleSceneIntro::Start()
 			LoadCircuit(circuit, circuit4, i);
 		if (i == 4)
 			LoadCircuit(circuit, circuit5, i);
-		
+
 	}
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	float size = 2.0f;
-	
+
 	//chain.radius = size;
 	//chain.SetPos(90, 10.f, 60);
 	//pb_chain = App->physics->AddBody(chain);
@@ -140,6 +143,33 @@ bool ModuleSceneIntro::CleanUp()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
+	if (first)
+	{
+
+		slid->color = Green;
+		pb_slider = App->physics->AddBody(*slid, 100);
+		pb_slider->SetPos(90, 14.5, 120);
+		App->physics->AddConstraintSlider(*pb_slider, false);
+		first = false;
+	}
+
+	if (move)
+	{
+		count3 = 0;
+		pb_slider->GetBody()->applyCentralImpulse(btVector3(0, 500, 0));
+		count2++;
+	}
+	if (count2 >= 50)
+	{
+		move = false;
+		pb_slider->GetBody()->applyCentralImpulse(btVector3(0, -500, 0));
+		count3++;
+	}
+	if (count3 >= 50)
+	{
+		move = true;
+		count2 = 0;
+	}
 	Painting();
 
 	return UPDATE_CONTINUE;
@@ -162,6 +192,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 		}	
 		if (reset.Read() >= 5000)
 		{
+			App->player->Nmap = 0;
 			App->player->WinAchieved();
 		}
 
@@ -195,7 +226,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 	Cube cubes2;
 	PhysBody3D* pb_cube2;
-
+	
 
 	switch (cir)
 	{
@@ -243,6 +274,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cubes.PushBack(pb_cube);
 		break;
 	case 5:
+		
 		//Floor
 		cubes.Size(scale.x, scale.y, scale.z);
 		s_cubes.PushBack(cubes);
@@ -252,7 +284,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cubes.PushBack(pb_cube);
 
 		//Obstacle
-		cubes.Size(15, 8, 2);	
+		cubes.Size(15, 8, 2);
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
 		pb_cube->SetPos(posX, 3, posZ);
@@ -289,6 +321,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 	case 8:
 		//floor
 		cubes.Size(scale.x, scale.y, scale.z);
+		cubes.color = Yellow;
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
 		pb_cube->SetPos(posX, 1, posZ);
@@ -308,6 +341,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 		//floor
 		cubes.Size(scale.x, scale.y, scale.z);
+		cubes.color = Yellow;
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
 		pb_cube->SetPos(posX, 1, posZ);
@@ -316,6 +350,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 		//change lvl
 		cubes2.Size(scale.x, scale.y, scale.z);
+		cubes2.color = Yellow;
 		s_endlvl.PushBack(cubes2);
 		pb_cube2 = App->physics->AddBody(cubes2, 0);
 		pb_cube2->SetPos(posX, 3, posZ);
@@ -334,6 +369,16 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->paiting = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
+
+	case 11:
+		cubes.Size(1, 100, 500);
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 1, posZ);
+		pb_cube->paiting = true;
+		pb_cubes.PushBack(pb_cube);
+
+		break;
 	default:
 		break;
 	}	
@@ -341,7 +386,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 void ModuleSceneIntro::Painting()
 {
-	Cube* floor_cube = new Cube(2500.0f, 0.0f, 2500.0f);
+	Cube* floor_cube = new Cube(5000.0f, 0.0f, 5000.0f);
 	floor_cube->color = Green;
 	floor_cube->Render();
 
@@ -364,7 +409,8 @@ void ModuleSceneIntro::Painting()
 		pb_rightstick->GetTransform(&(rightstick.transform));
 		rightstick.Render();*/
 
-
+	pb_slider->GetTransform(&(slid->transform));
+	slid->Render();
 		delete floor_cube;
 	floor_cube = nullptr;
 }
@@ -372,7 +418,7 @@ void ModuleSceneIntro::Painting()
 int ModuleSceneIntro::Size(int * vec)
 {
 	int count = 0;
-		for (int i = 0; vec[i] <= 10 && vec[i] >= 1; ++i)
+		for (int i = 0; vec[i] <= 11 && vec[i] >= 1; ++i)
 		{
 			count++;
 		}

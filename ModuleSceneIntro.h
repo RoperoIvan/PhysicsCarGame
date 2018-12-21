@@ -64,11 +64,17 @@ public:
 
 	Timer reset;
 	bool win = true;
+	bool first = true;
+	bool move = true;
+	
+	int count2 = 0;
+	int count3 = 0;
 	int circuit[MAX_CIRCUITSIZE];
 	Sphere chain;
 	Cube leftstick, rightstick, pole;
 	PhysBody3D* pb_chain, *pb_leftstick, *pb_rightstick, *pb_pole;
 	int count = 0;
-
+	Cube* slid = new Cube(30, 8, 1);
+	PhysBody3D* pb_slider;
 
 };
