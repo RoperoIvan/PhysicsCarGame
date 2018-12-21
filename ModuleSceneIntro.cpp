@@ -24,7 +24,7 @@ bool ModuleSceneIntro::Start()
 	int circuit1[70]{
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
-		2,2,1,1,1,2,2,
+		2,2,1,10,1,2,2,
 		2,2,1,7,1,2,2,
 		2,2,1,2,1,2,2,
 		2,2,5,2,5,2,2,
@@ -323,6 +323,17 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 
 		break;
+
+	case 10:
+		//ramp
+		cubes.Size(scale.x, scale.y, scale.z-15);
+		cubes.SetRotation(-15, vec3(1, 0, 0));
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 3, posZ-10);
+		pb_cube->paiting = true;
+		pb_cubes.PushBack(pb_cube);
+		break;
 	default:
 		break;
 	}	
@@ -361,7 +372,7 @@ void ModuleSceneIntro::Painting()
 int ModuleSceneIntro::Size(int * vec)
 {
 	int count = 0;
-		for (int i = 0; vec[i] <= 9 && vec[i] >= 1; ++i)
+		for (int i = 0; vec[i] <= 10 && vec[i] >= 1; ++i)
 		{
 			count++;
 		}

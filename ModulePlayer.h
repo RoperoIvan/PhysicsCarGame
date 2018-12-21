@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "p2Point.h"
+#include "Color.h"
 
 struct PhysVehicle3D;
 
@@ -24,9 +25,11 @@ public:
 	void UI(bool reset);
 	void SetScore();
 	void Stop();
+
 public:
 	
 	PhysVehicle3D* vehicle;
+	
 	float turn;
 	float acceleration;
 	float brake;
