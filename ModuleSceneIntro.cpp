@@ -26,12 +26,24 @@ bool ModuleSceneIntro::Start()
 	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 
 	//5 = create an obstacle; 6 = create a trap; 7 create an invisible road; 8 set the win condition; 
 	//9 create the level changer; 10 create a ramp;
+	int circuit0[70]{
+		2,2,2,2,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,2,10,2,2,2,
+		2,2,2,12,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,2,10,2,2,2,
+		2,2,2,9,2,2,2,
+		2,2,2,2,2,2,2,
+	};
 	int circuit1[70]{
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
 		2,2,10,2,1,2,2,
-		2,2,12,2,10,2,2,
+		11,2,12,2,10,2,2,
 		2,2,1,2,4,2,2,
 		2,2,1,2,1,2,2,
 		2,2,1,1,1,2,2,
@@ -91,17 +103,19 @@ bool ModuleSceneIntro::Start()
 		2,2,2,2,2,2,2,
 	};
 	//load circuit, only for 7-column circuits
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		if (i == 0)
-			LoadCircuit(circuit, circuit1, i);
+			LoadCircuit(circuit, circuit0, i);
 		if (i == 1)
-			LoadCircuit(circuit, circuit2, i);
+			LoadCircuit(circuit, circuit1, i);
 		if (i == 2)
-			LoadCircuit(circuit, circuit3, i);
+			LoadCircuit(circuit, circuit2, i);
 		if (i == 3)
-			LoadCircuit(circuit, circuit4, i);
+			LoadCircuit(circuit, circuit3, i);
 		if (i == 4)
+			LoadCircuit(circuit, circuit4, i);
+		if (i == 5)
 			LoadCircuit(circuit, circuit5, i);
 
 	}
@@ -143,7 +157,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			reset.Start();
 			win = false;
 			App->player->controls = false;
-			App->player->reset = 5;
+			App->player->reset = 10;
 			App->player->Stop();
 		}	
 		if (reset.Read() >= 5000)
@@ -224,7 +238,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 		//Slider
 		cubes.Size(scale.x, 8, scale.y);
-		cubes.color = Green;
+		/*cubes.color = Green;*/
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 100);
 	
@@ -232,6 +246,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		App->physics->AddConstraintSlider(*pb_cube, false);
 		pb_cube->sliders = true;
 		pb_cube->paiting = true;
+		pb_cube->clued = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
 	case 5:
@@ -332,6 +347,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		break;
 
 	case 11:
+		//Big Wall
 		cubes.Size(1, 100, 500);
 		cubes.color = Black;
 		s_cubes.PushBack(cubes);
@@ -344,11 +360,11 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 	case 12:
 		//ramp end
-		cubes.Size(scale.x, scale.y, scale.z - 15);
-		cubes.SetRotation(15, vec3(1, 0, 0));
+		cubes.Size(scale.x, scale.y, scale.z-15);
+		cubes.SetRotation(10, vec3(1, 0, 0));
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
-		pb_cube->SetPos(posX, 3, posZ);
+		pb_cube->SetPos(posX, 3, posZ+10);
 		pb_cube->paiting = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
@@ -409,12 +425,12 @@ void ModuleSceneIntro::Painting()
 				if (App->player->clue == true)
 				{
 					countclue++;
-					if (countclue <= 10)
+					if (countclue <= 20)
 					{
 						s_cubes[i].color = Green;
 					}
 					
-					else if (countclue >= 11 && countclue <= 20)
+					else if (countclue >= 21 && countclue <= 40)
 					{
 						s_cubes[i].color = White;
 					}
@@ -478,3 +494,54 @@ void ModuleSceneIntro::LoadCircuit(int * lvlcircuit, int * circuitx, int poscirc
 	}
 }
 
+void ModuleSceneIntro::LevelSelector(int lvlnumber)
+{
+	lvltime.Start();
+	App->player->clue = false;
+	switch (lvlnumber)
+	{
+	case 0:		
+		App->player->reset = 0;
+		App->player->Nmap = 0;		
+		break;
+	case 1:
+		App->player->reset = 1;
+		App->player->Nmap = 1;
+		break;
+	case 2:
+		App->player->reset = 2;
+		App->player->Nmap = 2;
+		break;
+	case 3:
+		App->player->reset = 3;
+		App->player->Nmap = 3;
+		break;
+	case 4:
+		App->player->reset = 4;
+		App->player->Nmap = 4;
+		break;
+	case 5:
+		App->player->reset = 5;
+		App->player->Nmap = 5;
+		break;
+	case 6:
+		App->player->reset = 6;
+		App->player->Nmap = 6;
+		break;
+	case 7:
+		App->player->reset = 7;
+		App->player->Nmap = 7;
+		break;
+	case 8:
+		App->player->reset = 8;
+		App->player->Nmap = 8;
+		break;
+	case 9:
+		App->player->reset = 9;
+		App->player->Nmap = 9;
+		break;
+	default:
+		break;
+	}
+	App->player->Restart(App->player->Nmap);
+}

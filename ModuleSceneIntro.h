@@ -4,7 +4,7 @@
 #include "Globals.h"
 #include "Primitive.h"
 
-#define MAX_CIRCUITSIZE 300
+#define MAX_CIRCUITSIZE 600
 
 struct PhysBody3D;
 struct PhysMotor3D;
@@ -26,7 +26,7 @@ public:
 	void Painting();
 	int Size(int* vec);
 	void LoadCircuit(int* lvlcircuit, int* circuitx, int poscircuit);
-
+	void LevelSelector(int lvlnumber);
 public:
 	
 	p2DynArray<PhysBody3D*> pb_cubes;
@@ -60,8 +60,6 @@ public:
 	int count2 = 0;
 	int count3 = 0;
 	int circuit[MAX_CIRCUITSIZE];
-	Sphere chain;
-	Cube  rightstick;
 	int count = 0;
 	int countclue = 0;
 	int lvlfx = 0;
