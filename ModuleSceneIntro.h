@@ -63,6 +63,7 @@ public:
 	Sphere chain;
 	Cube  rightstick;
 	int count = 0;
+	int countclue = 0;
 	int lvlfx = 0;
 	int gamewinfx = 0;
 };

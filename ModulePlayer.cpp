@@ -247,7 +247,7 @@ void ModulePlayer::UI(int reset)
 	case 2:
 		if (clue == true)
 		{
-			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+			sprintf_s(title, "Clue : Have you tried driving in the middle?");
 		}
 		else
 		{
@@ -257,7 +257,7 @@ void ModulePlayer::UI(int reset)
 	case 3:
 		if (clue == true)
 		{
-			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+			sprintf_s(title, "Clue : Try to think OUTSIDE the box");
 		}
 		else
 		{

@@ -55,7 +55,7 @@ bool ModuleSceneIntro::Start()
 	int circuit3[70]{
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
-		2,2,1,1,1,2,2,
+		2,2,1,13,1,2,2,
 		2,2,1,7,1,2,2,
 		11,2,6,7,6,2,2,
 		2,2,5,7,5,2,2,
@@ -69,7 +69,7 @@ bool ModuleSceneIntro::Start()
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
-		2,7,1,2,1,7,2,
+		2,7,13,2,13,7,2,
 		11,7,6,2,6,7,2,
 		2,7,5,2,5,7,2,
 		2,2,1,2,1,2,2,
@@ -122,7 +122,7 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 	Painting();
-	if (lvltime.Read() / 1000 >= 60)
+	if (lvltime.Read() / 1000 >= 30)
 	{
 		App->player->clue = true;
 	}
@@ -352,6 +352,16 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->paiting = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
+	case 13:
+		//Clued floor
+		cubes.Size(scale.x, scale.y, scale.z);
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 1, posZ);
+		pb_cube->paiting = true;
+		pb_cube->clued = true;
+		pb_cubes.PushBack(pb_cube);
+		break;
 	default:
 		break;
 	}	
@@ -394,6 +404,30 @@ void ModuleSceneIntro::Painting()
 					count2 = 0;
 				}
 			}
+			if (pb_cubes[i]->clued == true)
+			{
+				if (App->player->clue == true)
+				{
+					countclue++;
+					if (countclue <= 10)
+					{
+						s_cubes[i].color = Green;
+					}
+					
+					else if (countclue >= 11 && countclue <= 20)
+					{
+						s_cubes[i].color = White;
+					}
+					else
+					{
+						countclue = 0;
+					}
+				}
+				else
+				{
+					s_cubes[i].color = White;
+				}
+			}
 		}
 
 	}
@@ -404,7 +438,7 @@ void ModuleSceneIntro::Painting()
 int ModuleSceneIntro::Size(int * vec)
 {
 	int count = 0;
-		for (int i = 0; vec[i] <= 12 && vec[i] >= 1; ++i)
+		for (int i = 0; vec[i] <= 13 && vec[i] >= 1; ++i)
 		{
 			count++;
 		}
