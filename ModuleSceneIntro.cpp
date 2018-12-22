@@ -20,7 +20,9 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 	App->audio->PlayMusic("musicandfx/song.ogg");
-	Mix_VolumeMusic(0);
+	Mix_VolumeMusic(0);//10
+	lvlfx = App->audio->LoadFx("musicandfx/zap2.wav");
+	gamewinfx = App->audio->LoadFx("musicandfx/win.wav");
 	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 
 	//5 = create an obstacle; 6 = create a trap; 7 create an invisible road; 8 set the win condition; 
 	//9 create the level changer; 10 create a ramp;
@@ -120,7 +122,7 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 	Painting();
-	if (lvltime.Read() / 1000 >= 10)
+	if (lvltime.Read() / 1000 >= 60)
 	{
 		App->player->clue = true;
 	}
@@ -135,6 +137,8 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{
 		if (win)
 		{
+			Mix_VolumeMusic(0);
+			App->audio->PlayFx(gamewinfx);
 			App->player->playerTime.Stop();
 			reset.Start();
 			win = false;
@@ -163,6 +167,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 		{
 			if (count == 0)
 			{
+				App->audio->PlayFx(lvlfx);
 				lvltime.Start();
 				App->player->clue = false;
 				App->player->reset++;
@@ -328,6 +333,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 	case 11:
 		cubes.Size(1, 100, 500);
+		cubes.color = Black;
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
 		pb_cube->SetPos(posX, 1, posZ);
@@ -361,11 +367,13 @@ void ModuleSceneIntro::Painting()
 	{
 		for (int i = 0; i < s_cubes.Count(); i++) {
 			pb_cubes[i]->GetTransform(&s_cubes[i].transform);
+
+			//We paint only the cubes that we need to paint
 			if(pb_cubes[i]->paiting == true)
 			{
 				s_cubes[i].Render();
 			}
-				
+				//If the cube is a slider we apply up and down an impulse
 			if (pb_cubes[i]->sliders == true)
 			{
 				if (move)

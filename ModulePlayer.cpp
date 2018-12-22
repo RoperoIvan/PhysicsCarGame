@@ -18,7 +18,7 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
-
+	
 	VehicleInfo car;
 	playerTime.Start();
 	// Car properties ----------------------------------------
@@ -42,6 +42,10 @@ bool ModulePlayer::Start()
 	car.stickRightDown_offset.Set(-1.38, 3.09, -2.88);
 	car.stickRightUp_size.Set(0.25, 1.7, 0.25);
 	car.stickRightUp_offset.Set(-1.38, 3.09, -0.12);
+	car.siren_size.Set(1,0.5,0.5);
+	car.siren_offset.Set(0.5,4.25,-1);
+	car.siren2_size.Set(1,0.5,0.5);
+	car.siren2_offset.Set(-0.5, 4.25, -1);
 	car.mass = 500.0f;
 	car.suspensionStiffness = 15.88f;
 	car.suspensionCompression = 0.83f;
@@ -117,7 +121,7 @@ bool ModulePlayer::Start()
 
 	vehicle = App->physics->AddVehicle(car);
 	Restart(Nmap);
-	
+
 	/*vehicle->collision_listeners.add(this);*/
 	return true;
 }
@@ -163,7 +167,6 @@ update_status ModulePlayer::Update(float dt)
 	}
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
-		playerTime.Start();
 		Restart(Nmap);
 	}
 
@@ -171,7 +174,6 @@ update_status ModulePlayer::Update(float dt)
 	vehicle->Turn(turn);
 	vehicle->Brake(brake);
 	vehicle->Render();
-	
 	UI(reset);
 	return UPDATE_CONTINUE;
 }
@@ -203,6 +205,7 @@ void ModulePlayer::Restart(int map)
 
 void ModulePlayer::WinAchieved()
 {
+	//TO DO: put the music audio to the inital value (10) 
 	SetScore();
 	Restart(Nmap);	
 	playerTime.Start();
@@ -216,6 +219,8 @@ void ModulePlayer::WinAchieved()
 void ModulePlayer::UI(int reset)
 {
 	char title[80];
+
+	//For each level there are different clues that activate when the player stays in the same level an amount of time that is excessive
 	switch (reset)
 	{
 	case 0:
