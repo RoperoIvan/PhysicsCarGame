@@ -12,6 +12,14 @@ VehicleInfo::~VehicleInfo()
 // ----------------------------------------------------------------------------
 PhysVehicle3D::PhysVehicle3D(btRigidBody* body, btRaycastVehicle* vehicle, const VehicleInfo& info) : PhysBody3D(body), vehicle(vehicle), info(info)
 {
+	Cube sirenred(1, 0.5, 0.5);
+	Cube sirenblue(1, 0.5, 0.5);
+	Cube leftbacklight(0.5, 0.5, 0.5);
+	Cube rightbacklight(0.5, 0.5, 0.5);
+	sirens.PushBack(sirenblue);
+	sirens.PushBack(sirenred);
+	sirens.PushBack(leftbacklight);
+	sirens.PushBack(rightbacklight);
 }
 
 // ----------------------------------------------------------------------------
@@ -59,20 +67,18 @@ void PhysVehicle3D::Render()
 	Cube stickRightUp(info.stickRightUp_size.x, info.stickRightUp_size.y, info.stickRightUp_size.z);
 	vehicle->getChassisWorldTransform().getOpenGLMatrix(&stickRightUp.transform);
 
-	Cube siren(info.siren_size.x, info.siren_size.y, info.siren_size.z);
-	vehicle->getChassisWorldTransform().getOpenGLMatrix(&siren.transform);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&sirens[0].transform);
 
-	Cube siren2(info.siren2_size.x, info.siren2_size.y, info.siren2_size.z);
-	vehicle->getChassisWorldTransform().getOpenGLMatrix(&siren2.transform);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&sirens[1].transform);
 
 	Cube stickRightDown(info.stickRightDown_size.x, info.stickRightDown_size.y, info.stickRightDown_size.z);
 	vehicle->getChassisWorldTransform().getOpenGLMatrix(&stickRightDown.transform);
 
-	Cube backheadlight(info.backheadlight_size.x, info.backheadlight_size.y, info.backheadlight_size.z);
-	vehicle->getChassisWorldTransform().getOpenGLMatrix(&backheadlight.transform);
+	/*Cube backheadlight(info.backheadlight_size.x, info.backheadlight_size.y, info.backheadlight_size.z);*/
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&sirens[2].transform);
 
-	Cube backheadlight2(info.backheadlight2_size.x, info.backheadlight2_size.y, info.backheadlight2_size.z);
-	vehicle->getChassisWorldTransform().getOpenGLMatrix(&backheadlight2.transform);
+	/*Cube backheadlight2(info.backheadlight2_size.x, info.backheadlight2_size.y, info.backheadlight2_size.z);*/
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&sirens[3].transform);
 
 	btQuaternion q = vehicle->getChassisWorldTransform().getRotation();
 
@@ -82,11 +88,11 @@ void PhysVehicle3D::Render()
 	btVector3 cabin_offset(info.cabin_offset.x, info.cabin_offset.y, info.cabin_offset.z);
 	cabin_offset = cabin_offset.rotate(q.getAxis(), q.getAngle());
 
-	btVector3 siren_offset(info.siren_offset.x, info.siren_offset.y, info.siren_offset.z);
-	siren_offset = siren_offset.rotate(q.getAxis(), q.getAngle());
+	btVector3 redsirenlightoffset(0.5, 4.25, -1);
+	redsirenlightoffset = redsirenlightoffset.rotate(q.getAxis(), q.getAngle());
 
-	btVector3 siren2_offset(info.siren2_offset.x, info.siren2_offset.y, info.siren2_offset.z);
-	siren2_offset = siren2_offset.rotate(q.getAxis(), q.getAngle());
+	btVector3 bluesirenlightoffset(-0.5, 4.25, -1);
+	bluesirenlightoffset = bluesirenlightoffset.rotate(q.getAxis(), q.getAngle());
 
 	btVector3 headlight_offset(info.headlight_offset.x, info.headlight_offset.y, info.headlight_offset.z);
 	headlight_offset = headlight_offset.rotate(q.getAxis(), q.getAngle());
@@ -106,23 +112,28 @@ void PhysVehicle3D::Render()
 	btVector3 stickRightUp_offset(info.stickRightUp_offset.x, info.stickRightUp_offset.y, info.stickRightUp_offset.z);
 	stickRightUp_offset = stickRightUp_offset.rotate(q.getAxis(), q.getAngle());
 
-	btVector3 backheadlight_offset(info.backheadlight_offset.x, info.backheadlight_offset.y, info.backheadlight_offset.z);
+	btVector3 leftbacklight_offset(1, 1.5, -3);
+	leftbacklight_offset = leftbacklight_offset.rotate(q.getAxis(), q.getAngle());
+
+	btVector3 rightbacklight_offset(-1, 1.5, -3);
+	rightbacklight_offset = rightbacklight_offset.rotate(q.getAxis(), q.getAngle());
+	/*btVector3 backheadlight_offset(info.backheadlight_offset.x, info.backheadlight_offset.y, info.backheadlight_offset.z);
 	backheadlight_offset = backheadlight_offset.rotate(q.getAxis(), q.getAngle());
 
 	btVector3 backheadlight2_offset(info.backheadlight2_offset.x, info.backheadlight2_offset.y, info.backheadlight2_offset.z);
 	backheadlight2_offset = backheadlight2_offset.rotate(q.getAxis(), q.getAngle());
-
+*/
 	chassis.transform.M[12] += offset.getX();
 	chassis.transform.M[13] += offset.getY();
 	chassis.transform.M[14] += offset.getZ();
 
-	siren.transform.M[12] += siren_offset.getX();
-	siren.transform.M[13] += siren_offset.getY();
-	siren.transform.M[14] += siren_offset.getZ();
+	sirens[0].transform[12] += redsirenlightoffset.getX();
+	sirens[0].transform[13] += redsirenlightoffset.getY();
+	sirens[0].transform[14] += redsirenlightoffset.getZ();
 
-	siren2.transform.M[12] += siren2_offset.getX();
-	siren2.transform.M[13] += siren2_offset.getY();
-	siren2.transform.M[14] += siren2_offset.getZ();
+	sirens[1].transform[12] += bluesirenlightoffset.getX();
+	sirens[1].transform[13] += bluesirenlightoffset.getY();
+	sirens[1].transform[14] += bluesirenlightoffset.getZ();
 
 	cabin.transform.M[12] += cabin_offset.getX();
 	cabin.transform.M[13] += cabin_offset.getY();
@@ -152,40 +163,37 @@ void PhysVehicle3D::Render()
 	stickRightDown.transform.M[13] += stickRightDown_offset.getY();
 	stickRightDown.transform.M[14] += stickRightDown_offset.getZ();
 
-	backheadlight.transform.M[12] += backheadlight_offset.getX();
-	backheadlight.transform.M[13] += backheadlight_offset.getY();
-	backheadlight.transform.M[14] += backheadlight_offset.getZ();
+	sirens[2].transform[12] += leftbacklight_offset.getX();
+	sirens[2].transform[13] += leftbacklight_offset.getY();
+	sirens[2].transform[14] += leftbacklight_offset.getZ();
 
-	backheadlight2.transform.M[12] += backheadlight2_offset.getX();
-	backheadlight2.transform.M[13] += backheadlight2_offset.getY();
-	backheadlight2.transform.M[14] += backheadlight2_offset.getZ();
+	sirens[3].transform[12] += rightbacklight_offset.getX();
+	sirens[3].transform[13] += rightbacklight_offset.getY();
+	sirens[3].transform[14] += rightbacklight_offset.getZ();
 
 	chassis.color = Blue;
 	cabin.color = Black;
 	headlight.color = Yellow;
 	headlight2.color = Yellow;
-	backheadlight.color = Yellow;
-	backheadlight2.color = Yellow;
 	stickRightDown.color = Black;
 	stickRightUp.color = Black;
 	stickLeftDown.color = Black;
 	stickLeftUp.color = Black;
-	siren.color = Red;
-	siren2.color = Blue;
 
 	chassis.Render();
 	cabin.Render();
 	headlight.Render();
 	headlight2.Render();
-	backheadlight.Render();
-	backheadlight2.Render();
 	headlight2.Render();
 	stickRightDown.Render();
 	stickRightUp.Render();
 	stickLeftDown.Render();
 	stickLeftUp.Render();
-	siren.Render();
-	siren2.Render();
+
+	for (int i = 0; i < sirens.Count(); i++)
+	{
+		sirens[i].Render();
+	}
 }
 
 // ----------------------------------------------------------------------------

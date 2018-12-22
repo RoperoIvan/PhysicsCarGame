@@ -30,7 +30,7 @@ public:
 public:
 	
 	PhysVehicle3D* vehicle;
-	
+	VehicleInfo* car;
 	float turn;
 	float acceleration;
 	float brake;
@@ -38,8 +38,9 @@ public:
 	Timer playerTime;
 	bool controls = true;
 	bool clue = false;
+	bool emergency = false;
 	int Nmap = 0;
 	int reset = 0;
-
+	int countlight = 0;
 
 };

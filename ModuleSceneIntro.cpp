@@ -20,7 +20,7 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 	App->audio->PlayMusic("musicandfx/song.ogg");
-	Mix_VolumeMusic(0);//10
+	Mix_VolumeMusic(10);//10
 	lvlfx = App->audio->LoadFx("musicandfx/zap2.wav");
 	gamewinfx = App->audio->LoadFx("musicandfx/win.wav");
 	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 
@@ -136,6 +136,7 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 	Painting();
+	//The player has 30 seconds until the game gives a clue
 	if (lvltime.Read() / 1000 >= 30)
 	{
 		App->player->clue = true;
@@ -227,6 +228,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		LOG("%i, %i", posX, posZ);
 		break;
 	case 4:
+		//TO DO elevate the floor
 		//Floor
 		cubes.Size(scale.x, scale.y, 15);
 		s_cubes.PushBack(cubes);
