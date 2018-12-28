@@ -20,12 +20,12 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 	App->audio->PlayMusic("musicandfx/song.ogg");
-	Mix_VolumeMusic(10);//10
+	Mix_VolumeMusic(0);//10
 	lvlfx = App->audio->LoadFx("musicandfx/zap2.wav");
 	gamewinfx = App->audio->LoadFx("musicandfx/win.wav");
 	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 
 	//5 = create an obstacle; 6 = create a trap; 7 create an invisible road; 8 set the win condition; 
-	//9 create the level changer; 10 create a ramp;
+	//9 create the level changer; 10 create a ramp; 11 big wall; 12 end ramp; 13 clued path;
 	int circuit0[70]{
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
@@ -33,8 +33,8 @@ bool ModuleSceneIntro::Start()
 		2,2,2,10,2,2,2,
 		2,2,2,12,2,2,2,
 		2,2,2,1,2,2,2,
-		2,2,2,1,2,2,2,
 		2,2,2,10,2,2,2,
+		2,2,2,2,2,2,2,
 		2,2,2,9,2,2,2,
 		2,2,2,2,2,2,2,
 	};
@@ -55,7 +55,7 @@ bool ModuleSceneIntro::Start()
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
-		2,2,1,7,1,2,2,
+		2,2,1,1,1,2,2,
 		11,2,6,2,1,2,2,
 		2,2,5,2,5,2,2,
 		2,2,1,2,1,2,2,
@@ -99,11 +99,37 @@ bool ModuleSceneIntro::Start()
 		2,1,1,1,1,1,2,
 		2,2,2,2,2,1,2,
 		2,2,1,1,1,1,2,
-		2,8,1,2,2,2,2,
+		2,9,1,2,2,2,2,
 		2,2,2,2,2,2,2,
 	};
+
+	int circuit6[70]{
+		2,2,2,9,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,2,6,2,2,2,
+		2,2,2,6,2,2,2,
+		11,2,2,6,2,2,2,
+		2,2,2,6,2,2,2,
+		2,2,2,6,2,2,2,
+		2,2,2,6,2,2,2,
+		2,2,2,6,2,2,2,
+		2,2,2,2,2,2,2,
+	};
+	int circuit7[70]{
+		2,2,2,2,2,2,2,
+		2,6,6,1,6,6,2,
+		2,1,1,1,1,6,2,
+		2,6,6,6,1,6,2,
+		11,6,1,1,1,6,2,
+		2,6,1,6,6,6,2,
+		2,6,1,1,6,6,2,
+		2,6,6,1,6,6,2,
+		2,8,1,1,6,6,2,
+		2,2,2,2,2,2,2,
+	};
+
 	//load circuit, only for 7-column circuits
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 8; ++i)
 	{
 		if (i == 0)
 			LoadCircuit(circuit, circuit0, i);
@@ -117,6 +143,10 @@ bool ModuleSceneIntro::Start()
 			LoadCircuit(circuit, circuit4, i);
 		if (i == 5)
 			LoadCircuit(circuit, circuit5, i);
+		if (i == 6)
+			LoadCircuit(circuit, circuit6, i);
+		if (i == 7)
+			LoadCircuit(circuit, circuit7, i);
 
 	}
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
@@ -387,7 +417,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 void ModuleSceneIntro::Painting()
 {
-	Cube* floor_cube = new Cube(5000.0f, 0.0f, 5000.0f);
+	Cube* floor_cube = new Cube(5000.0f, 0.0f, 800.0f);
 	floor_cube->color = Green;
 	floor_cube->Render();
 

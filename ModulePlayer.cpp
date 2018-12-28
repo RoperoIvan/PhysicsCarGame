@@ -47,7 +47,7 @@ bool ModulePlayer::Start()
 	car->mass = 500.0f;
 	car->suspensionStiffness = 15.88f;
 	car->suspensionCompression = 0.83f;
-	car->suspensionDamping = 0.88f;
+	car->suspensionDamping = 10.88f;
 	car->maxSuspensionTravelCm = 1000.0f;
 	car->frictionSlip = 50.5;
 	car->maxSuspensionForce = 6000.0f;
@@ -212,7 +212,7 @@ void ModulePlayer::UI(int reset)
 	case 0:
 		if (clue == true)
 		{
-			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+			sprintf_s(title, "Clue: I think is pretty obvious what you have to do, maybe you are just bad");
 		}
 		else
 		{
@@ -222,7 +222,7 @@ void ModulePlayer::UI(int reset)
 	case 1:
 		if (clue == true)
 		{
-			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+			sprintf_s(title, "Clue: Try jumping over that green thing");
 		}
 		else
 		{
@@ -233,7 +233,7 @@ void ModulePlayer::UI(int reset)
 	case 2:
 		if (clue == true)
 		{
-			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+			sprintf_s(title, "Clue: Always looking the RIGHT side of life!");
 		}
 		else
 		{
@@ -263,11 +263,21 @@ void ModulePlayer::UI(int reset)
 	case 5:
 		if (clue == true)
 		{
-			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+			sprintf_s(title, "Clue: Dude, just drive like a normal person until you arrive in the yellow square, its not that hard");
 		}
 		else
 		{
 			sprintf_s(title, "LEVEL 5 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		}
+		break;
+	case 6:
+		if (clue == true)
+		{
+			sprintf_s(title, "Clue: Dont LOOK BEHIND you, theres a monster");
+		}
+		else
+		{
+			sprintf_s(title, "LEVEL 6 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 		}
 		break;
 	case 10:

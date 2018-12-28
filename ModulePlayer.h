@@ -6,8 +6,8 @@
 
 struct PhysVehicle3D;
 
-#define MAX_ACCELERATION 1700.0f
-#define TURN_DEGREES 15.0f * DEGTORAD
+#define MAX_ACCELERATION 1800.0f
+#define TURN_DEGREES 20.0f * DEGTORAD
 #define BRAKE_POWER 1000.0f
 
 class ModulePlayer : public Module
@@ -38,7 +38,7 @@ public:
 	Timer playerTime;
 	bool controls = true;
 	bool clue = false;
-	bool emergency = false;
+	bool emergency = true;
 	int Nmap = 0;
 	int reset = 0;
 	int countlight = 0;
