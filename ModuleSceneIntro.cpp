@@ -20,9 +20,10 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 	App->audio->PlayMusic("musicandfx/song.ogg");
-	Mix_VolumeMusic(0);//10
+	Mix_VolumeMusic(20);//10
 	lvlfx = App->audio->LoadFx("musicandfx/zap2.wav");
 	gamewinfx = App->audio->LoadFx("musicandfx/win.wav");
+	deadfx = App->audio->LoadFx("musicandfx/dead.wav");
 	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 
 	//5 = create an obstacle; 6 = create a trap; 7 create an invisible road; 8 set the win condition; 
 	//9 create the level changer; 10 create a ramp; 11 big wall; 12 end ramp; 13 clued path;
@@ -179,7 +180,7 @@ update_status ModuleSceneIntro::Update(float dt)
 			timetrial.Start();
 			run = false;
 		}
-		if (timetrial.Read() / 1000 == 15 && win == false)
+		if (timetrial.Read() / 1000 == 15 && win == true)
 		{
 
 			App->player->Restart(7);
@@ -216,6 +217,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{
 		if ((body1 == pb_limits[i]) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_limits[i]) && (body1 == (PhysBody3D*)App->player->vehicle))
 		{
+			App->audio->PlayFx(deadfx);
 			App->player->Restart(App->player->Nmap);
 		}
 	}

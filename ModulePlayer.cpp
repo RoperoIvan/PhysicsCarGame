@@ -207,7 +207,7 @@ void ModulePlayer::WinAchieved()
 
 void ModulePlayer::UI(int reset)
 {
-	char title[80];
+	char title[180];
 
 	//For each level there are different clues that activate when the player stays in the same level for an excessive amount of time
 	switch (reset)
@@ -286,11 +286,11 @@ void ModulePlayer::UI(int reset)
 	case 7:
 		if (clue == true)
 		{
-			sprintf_s(title, "Clue: Come on, you can do it you are almost there!");
+			sprintf_s(title, "Clue: Come on, you can do it you are almost there! %i", App->scene_intro->timetrial.Read() / 1000);
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 7 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+			sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f YOU MUST PASS THE LEVEL IN LESS THAN 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read()/1000);
 		}
 		break;
 	case 10:

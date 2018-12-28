@@ -65,4 +65,5 @@ public:
 	int countclue = 0;
 	int lvlfx = 0;
 	int gamewinfx = 0;
+	int deadfx = 0;
 };
