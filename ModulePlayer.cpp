@@ -173,6 +173,7 @@ void ModulePlayer::Restart(int map)
 		mat4x4 matrix;
 		vehicle->SetTransform(matrix.M);
 		Stop();
+		App->scene_intro->run = true;
 		for (int i = 0; i < 70; ++i)
 		{
 
@@ -193,6 +194,8 @@ void ModulePlayer::WinAchieved()
 	//TO DO: put the music audio to the inital value (10) 
 	Mix_VolumeMusic(10);
 	SetScore();
+	App->scene_intro->timetrial.Read() == 0;
+	App->scene_intro->timetrial.Stop();
 	Restart(Nmap);	
 	playerTime.Start();
 	App->scene_intro->lvltime.Start();
@@ -278,6 +281,16 @@ void ModulePlayer::UI(int reset)
 		else
 		{
 			sprintf_s(title, "LEVEL 6 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		}
+		break;
+	case 7:
+		if (clue == true)
+		{
+			sprintf_s(title, "Clue: Come on, you can do it you are almost there!");
+		}
+		else
+		{
+			sprintf_s(title, "LEVEL 7 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 		}
 		break;
 	case 10:

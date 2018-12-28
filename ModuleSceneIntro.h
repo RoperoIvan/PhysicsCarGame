@@ -54,9 +54,10 @@ public:
 	Cube sensor_victory;
 
 
-	Timer reset, lvltime;
+	Timer reset, lvltime, timetrial;
 	bool win = true;
 	bool move = true;
+	bool run = true;
 	int count2 = 0;
 	int count3 = 0;
 	int circuit[MAX_CIRCUITSIZE];

@@ -56,8 +56,8 @@ bool ModuleSceneIntro::Start()
 		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
 		2,2,1,1,1,2,2,
-		11,2,6,2,1,2,2,
-		2,2,5,2,5,2,2,
+		11,2,13,2,6,2,2,
+		2,2,1,2,1,2,2,
 		2,2,1,2,1,2,2,
 		2,2,1,1,1,2,2,
 		2,2,2,9,2,2,2,
@@ -109,7 +109,7 @@ bool ModuleSceneIntro::Start()
 		2,2,2,6,2,2,2,
 		2,2,2,6,2,2,2,
 		11,2,2,6,2,2,2,
-		2,2,2,6,2,2,2,
+		2,2,2,5,2,2,2,
 		2,2,2,6,2,2,2,
 		2,2,2,6,2,2,2,
 		2,2,2,6,2,2,2,
@@ -117,14 +117,14 @@ bool ModuleSceneIntro::Start()
 	};
 	int circuit7[70]{
 		2,2,2,2,2,2,2,
-		2,6,6,1,6,6,2,
-		2,1,1,1,1,6,2,
-		2,6,6,6,1,6,2,
-		11,6,1,1,1,6,2,
-		2,6,1,6,6,6,2,
-		2,6,1,1,6,6,2,
-		2,6,6,1,6,6,2,
-		2,8,1,1,6,6,2,
+		2,2,2,1,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,2,10,2,2,2,
+		11,1,1,1,2,2,2,
+		2,5,2,2,2,2,2,
+		2,1,1,1,1,1,2,
+		2,2,2,2,2,10,2,
+		2,8,1,1,1,5,2,
 		2,2,2,2,2,2,2,
 	};
 
@@ -170,6 +170,20 @@ update_status ModuleSceneIntro::Update(float dt)
 	if (lvltime.Read() / 1000 >= 30)
 	{
 		App->player->clue = true;
+	}
+	//If the player doesnt arrive in time the level will restart
+	if (App->player->Nmap == 7)
+	{
+		if (run == true)
+		{
+			timetrial.Start();
+			run = false;
+		}
+		if (timetrial.Read() / 1000 == 15 && win == false)
+		{
+
+			App->player->Restart(7);
+		}
 	}
 	return UPDATE_CONTINUE;
 }
