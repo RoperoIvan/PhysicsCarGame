@@ -126,13 +126,13 @@ bool ModuleSceneIntro::Start()
 	int circuit7[70]{
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
-		2,2,2,1,2,2,2,
-		2,2,2,10,2,2,2,
+		2,7,7,1,2,2,2,
+		2,7,2,10,2,2,2,
 		11,1,1,1,2,2,2,
 		2,5,2,2,2,2,2,
 		2,1,1,1,1,1,2,
-		2,2,2,2,2,10,2,
-		2,8,1,1,1,5,2,
+		2,7,2,2,2,10,2,
+		2,9,1,1,1,5,2,
 		2,2,2,2,2,2,2,
 	};
 	int circuit8[70]{
@@ -229,7 +229,7 @@ update_status ModuleSceneIntro::Update(float dt)
 			changing.Start();
 			trick = false;
 		}
-		if (changing.Read() / 1000 == 4)
+		if (changing.Read() / 1000 == 3)
 		{
 			randomize = rand() % 37;
 			sensor_tricky.SetPos(p[randomize].x, 3, p[randomize].y);
@@ -539,7 +539,8 @@ void ModuleSceneIntro::PaintingAndManaging()
 	sensor_tricky.Render();
 	if (pb_cubes.Count() != 0 && s_cubes.Count() != 0 && s_cubes.Count() == pb_cubes.Count()) 
 	{
-		for (int i = 0; i < s_cubes.Count(); i++) {
+		for (int i = 0; i < s_cubes.Count(); i++) 
+		{
 			pb_cubes[i]->GetTransform(&s_cubes[i].transform);
 
 			//We paint only the cubes that we need to paint
@@ -552,41 +553,28 @@ void ModuleSceneIntro::PaintingAndManaging()
 			{
 				if (move)
 				{
-					count3 = 0;
-					pb_cubes[i]->GetBody()->applyCentralImpulse(btVector3(0, 500, 0));
-					count2++;
+					slide.Start();
+					move = false;					
 				}
-				if (count2 >= 50)
+				if (slide.Read() <= 500)
 				{
-					move = false;
-					pb_cubes[i]->GetBody()->applyCentralImpulse(btVector3(0, -500, 0));
-					count3++;
+					pb_cubes[i]->GetBody()->applyCentralImpulse(btVector3(0, 800, 0));
 				}
-				if (count3 >= 50)
+				if (slide.Read() >= 1000 && slide.Read() <= 1500)
+				{
+					pb_cubes[i]->GetBody()->applyCentralImpulse(btVector3(0, -800, 0));
+				}
+				if(slide.Read() >= 2000)
 				{
 					move = true;
-					count2 = 0;
 				}
 			}
 			//The cubes that have the clue ability will change color when the game gives the clue
 			if (pb_cubes[i]->clued == true)
 			{
 				if (App->player->clue == true || App->player->help == true)
-				{
-					countclue++;
-					if (countclue <= 20)
-					{
-						s_cubes[i].color = Green;
-					}
-					
-					else if (countclue >= 21 && countclue <= 40)
-					{
-						s_cubes[i].color = White;
-					}
-					else
-					{
-						countclue = 0;
-					}
+				{										
+						s_cubes[i].color = Green;												
 				}
 				else
 				{

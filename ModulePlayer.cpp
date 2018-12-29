@@ -308,7 +308,7 @@ void ModulePlayer::UI(int reset)
 	case 9:
 		if (clue == true || help == true)
 		{
-			sprintf_s(title, "Clue: You don't need jump all ramps");
+			sprintf_s(title, "Clue: You don't need to jump all the ramps");
 		}
 		else
 		{

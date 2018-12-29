@@ -56,17 +56,16 @@ public:
 	PhysBody3D* pb_tricky;
 	Cube sensor_tricky;
 
-	Timer reset, lvltime, timetrial, changing;
+	Timer reset, lvltime, timetrial, changing, slide;
 	bool win = true;
 	bool move = true;
 	bool run = true;
+	bool up = false;
+	bool down = true;
 	bool trick = true;
-	int count2 = 0;
-	int count3 = 0;
 	int circuit[MAX_CIRCUITSIZE];
 	int saving = 0;
 	int count = 0;
-	int countclue = 0;
 	int lvlfx = 0;
 	int gamewinfx = 0;
 	int deadfx = 0;
