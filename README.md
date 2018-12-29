@@ -1,4 +1,4 @@
-# UnFair Cario
+﻿# UnFair Cario
 
 Hey! This is a car game created by two students of CITM. The game has been created with the Bullet and OpenGL libreries in C++.
 
@@ -33,6 +33,8 @@ Hey! This is a car game created by two students of CITM. The game has been creat
 - UP ARROW = Go forward.
 
 - SPACEBAR = Use the brake.
+
+- C = The game gives you the clue automatically.
 
 - F1 = you will see the debug mode.
 

@@ -173,7 +173,10 @@ void ModulePlayer::Restart(int map)
 		mat4x4 matrix;
 		vehicle->SetTransform(matrix.M);
 		Stop();
+		clue = false;
+		help = false;
 		App->scene_intro->run = true;
+		App->scene_intro->trick = true;
 		for (int i = 0; i < 70; ++i)
 		{
 
@@ -199,7 +202,6 @@ void ModulePlayer::WinAchieved()
 	Restart(Nmap);	
 	playerTime.Start();
 	App->scene_intro->lvltime.Start();
-	App->player->clue = false;
 	App->scene_intro->win = true;
 	controls = true;
 	reset = 0;
@@ -213,7 +215,7 @@ void ModulePlayer::UI(int reset)
 	switch (reset)
 	{
 	case 0:
-		if (clue == true)
+		if (clue == true || help == true)
 		{
 			sprintf_s(title, "Clue: I think is pretty obvious what you have to do, maybe you are just bad");
 		}
@@ -223,7 +225,7 @@ void ModulePlayer::UI(int reset)
 		}
 		break;
 	case 1:
-		if (clue == true)
+		if (clue == true || help == true)
 		{
 			sprintf_s(title, "Clue: Try jumping over that green thing");
 		}
@@ -234,7 +236,7 @@ void ModulePlayer::UI(int reset)
 		
 		break;
 	case 2:
-		if (clue == true)
+		if (clue == true || help == true)
 		{
 			sprintf_s(title, "Clue: Always looking the RIGHT side of life!");
 		}
@@ -244,7 +246,7 @@ void ModulePlayer::UI(int reset)
 		}	
 		break;
 	case 3:
-		if (clue == true)
+		if (clue == true || help == true)
 		{
 			sprintf_s(title, "Clue : Have you tried driving in the middle?");
 		}
@@ -254,7 +256,7 @@ void ModulePlayer::UI(int reset)
 		}
 		break;
 	case 4:
-		if (clue == true)
+		if (clue == true || help == true)
 		{
 			sprintf_s(title, "Clue : Try to think OUTSIDE the box");
 		}
@@ -264,7 +266,7 @@ void ModulePlayer::UI(int reset)
 		}
 		break;
 	case 5:
-		if (clue == true)
+		if (clue == true || help == true)
 		{
 			sprintf_s(title, "Clue: Dude, just drive like a normal person until you arrive in the yellow square, its not that hard");
 		}
@@ -274,7 +276,7 @@ void ModulePlayer::UI(int reset)
 		}
 		break;
 	case 6:
-		if (clue == true)
+		if (clue == true || help == true)
 		{
 			sprintf_s(title, "Clue: Dont LOOK BEHIND you, theres a monster");
 		}
@@ -284,13 +286,23 @@ void ModulePlayer::UI(int reset)
 		}
 		break;
 	case 7:
-		if (clue == true)
+		if (clue == true || help == true)
 		{
 			sprintf_s(title, "Clue: Come on, you can do it you are almost there! %i", App->scene_intro->timetrial.Read() / 1000);
 		}
 		else
 		{
 			sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f YOU MUST PASS THE LEVEL IN LESS THAN 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read()/1000);
+		}
+		break;
+	case 8:
+		if (clue == true || help == true)
+		{
+			sprintf_s(title, "Clue: Come on, you can do it you are almost there! %i", App->scene_intro->timetrial.Read() / 1000);
+		}
+		else
+		{
+			sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f YOU MUST PASS THE LEVEL IN LESS THAN 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
 		}
 		break;
 	case 10:
@@ -362,7 +374,10 @@ void ModulePlayer::Control()
 	{
 		Restart(Nmap);
 	}
-
+	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+	{
+		help = true;
+	}
 	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_REPEAT && controls)
 	{
 		App->scene_intro->LevelSelector(0);

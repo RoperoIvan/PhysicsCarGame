@@ -38,6 +38,7 @@ public:
 	Timer playerTime;
 	bool controls = true;
 	bool clue = false;
+	bool help = false;
 	bool emergency = true;
 	int Nmap = 0;
 	int reset = 0;

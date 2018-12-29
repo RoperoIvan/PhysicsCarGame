@@ -4,7 +4,7 @@
 #include "Globals.h"
 #include "Primitive.h"
 
-#define MAX_CIRCUITSIZE 600
+#define MAX_CIRCUITSIZE 700
 
 struct PhysBody3D;
 struct PhysMotor3D;
@@ -23,7 +23,7 @@ public:
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 	void CreateFloor(vec3 scale, int posX, int posZ, int cir);
-	void Painting();
+	void PaintingAndManaging();
 	int Size(int* vec);
 	void LoadCircuit(int* lvlcircuit, int* circuitx, int poscircuit);
 	void LevelSelector(int lvlnumber);
@@ -53,17 +53,24 @@ public:
 	PhysBody3D* pb_victory;
 	Cube sensor_victory;
 
+	PhysBody3D* pb_tricky;
+	Cube sensor_tricky;
 
-	Timer reset, lvltime, timetrial;
+	Timer reset, lvltime, timetrial, changing;
 	bool win = true;
 	bool move = true;
 	bool run = true;
+	bool trick = true;
 	int count2 = 0;
 	int count3 = 0;
 	int circuit[MAX_CIRCUITSIZE];
+	int tricky[38];
+	int saving = 0;
 	int count = 0;
 	int countclue = 0;
 	int lvlfx = 0;
 	int gamewinfx = 0;
 	int deadfx = 0;
+	int randomize = 0;
+	vec2 p[38];
 };
