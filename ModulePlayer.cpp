@@ -221,7 +221,7 @@ void ModulePlayer::UI(int reset)
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 0 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+			sprintf_s(title, "LEVEL 0 Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
 		}
 		break;
 	case 1:
@@ -231,9 +231,9 @@ void ModulePlayer::UI(int reset)
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 1 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+			sprintf_s(title, "LEVEL 1 Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
 		}
-		
+
 		break;
 	case 2:
 		if (clue == true || help == true)
@@ -242,8 +242,8 @@ void ModulePlayer::UI(int reset)
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 2 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
-		}	
+			sprintf_s(title, "LEVEL 2 Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
+		}
 		break;
 	case 3:
 		if (clue == true || help == true)
@@ -252,7 +252,7 @@ void ModulePlayer::UI(int reset)
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 3 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+			sprintf_s(title, "LEVEL 3 Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
 		}
 		break;
 	case 4:
@@ -262,7 +262,7 @@ void ModulePlayer::UI(int reset)
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 4 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+			sprintf_s(title, "LEVEL 4 Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
 		}
 		break;
 	case 5:
@@ -272,7 +272,7 @@ void ModulePlayer::UI(int reset)
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 5 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+			sprintf_s(title, "LEVEL 5 Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
 		}
 		break;
 	case 6:
@@ -282,7 +282,7 @@ void ModulePlayer::UI(int reset)
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 6 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+			sprintf_s(title, "LEVEL 6 Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
 		}
 		break;
 	case 7:
@@ -292,17 +292,27 @@ void ModulePlayer::UI(int reset)
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f YOU MUST PASS THE LEVEL IN LESS THAN 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read()/1000);
+			sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f YOU MUST PASS THE LEVEL IN LESS THAN 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
 		}
 		break;
 	case 8:
 		if (clue == true || help == true)
 		{
-			sprintf_s(title, "Clue: Come on, you can do it you are almost there! %i", App->scene_intro->timetrial.Read() / 1000);
+			sprintf_s(title, "Clue: You have like... 5 seconds until the yellow thing changes its position ");
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f YOU MUST PASS THE LEVEL IN LESS THAN 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
+			sprintf_s(title, "LEVEL 8 Your Time: %.0f Best Time: %.0f ", ShowTime(), bestTime);
+		}
+		break;
+	case 9:
+		if (clue == true || help == true)
+		{
+			sprintf_s(title, "Clue: You don't need jump all ramps");
+		}
+		else
+		{
+			sprintf_s(title, "LEVEL 9 Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
 		}
 		break;
 	case 10:
@@ -361,7 +371,7 @@ void ModulePlayer::Control()
 		vehicle->sirens[2].color = Red;
 		vehicle->sirens[3].color = Red;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
 		vehicle->sirens[2].color = Yellow;
 		vehicle->sirens[3].color = Yellow;
@@ -369,6 +379,8 @@ void ModulePlayer::Control()
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && controls)
 	{
 		brake = BRAKE_POWER;
+		vehicle->sirens[2].color = Red;
+		vehicle->sirens[3].color = Red;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{

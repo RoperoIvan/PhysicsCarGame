@@ -27,7 +27,7 @@ bool ModuleSceneIntro::Start()
 	sensor_tricky.Size(30, 1, 15);
 	pb_tricky = App->physics->AddBody(sensor_tricky, 0);
 	sensor_tricky.color = Yellow;
-	pb_tricky->SetPos(2040, 3, 30);
+	pb_tricky->SetPos(2010, 3, 210);
 	pb_tricky->GetTransform(&sensor_tricky.transform);
 	pb_tricky->SetAsSensor(true);
 	pb_tricky->collision_listeners.add(this);
@@ -147,8 +147,21 @@ bool ModuleSceneIntro::Start()
 		2,15,15,15,15,15,2,
 		2,2,2,2,2,2,2,
 	};
+
+	int circuit9[70]{
+		2,2,2,2,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,2,14,7,7,2,
+		2,2,2,6,6,1,2,
+		11,2,2,2,2,1,2,
+		2,1,1,1,2,10,2,
+		2,10,2,5,4,4,2,
+		2,12,2,1,1,2,2,
+		2,8,2,2,2,2,2,
+		2,2,2,2,2,2,2,
+	};
 	//load circuit, only for 7-column circuits
-	for (int i = 0; i < 9; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		if (i == 0)
 			LoadCircuit(circuit, circuit0, i);
@@ -168,6 +181,8 @@ bool ModuleSceneIntro::Start()
 			LoadCircuit(circuit, circuit7, i);
 		if (i == 8)
 			LoadCircuit(circuit, circuit8, i);
+		if (i == 9)
+			LoadCircuit(circuit, circuit9, i);
 	}
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
@@ -201,7 +216,7 @@ update_status ModuleSceneIntro::Update(float dt)
 			timetrial.Start();
 			run = false;
 		}
-		if (timetrial.Read() / 1000 == 15 && win == true)
+		if (timetrial.Read() / 1000 == 18 && win == true)
 		{
 
 			App->player->Restart(7);
@@ -214,10 +229,9 @@ update_status ModuleSceneIntro::Update(float dt)
 			changing.Start();
 			trick = false;
 		}
-		if (changing.Read() / 1000 == 5)
+		if (changing.Read() / 1000 == 4)
 		{
 			randomize = rand() % 37;
-			tricky[randomize];
 			sensor_tricky.SetPos(p[randomize].x, 3, p[randomize].y);
 			pb_tricky->SetTransform(&sensor_tricky.transform);
 			trick = true;
@@ -322,16 +336,12 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		LOG("%i, %i", posX, posZ);
 		break;
 	case 4:
-		//TO DO elevate the floor
-		//Floor
-		cubes.Size(scale.x, scale.y, 15);
-		s_cubes.PushBack(cubes);
-		pb_cube = App->physics->AddBody(cubes, 0);
-		pb_cube->SetPos(posX, 1, posZ+15);
-		pb_cube->paiting = true;
-		pb_cubes.PushBack(pb_cube);
-		
-
+		//Limit
+		cubes2.Size(scale.x, scale.y, scale.z);
+		s_limits.PushBack(cubes2);
+		pb_cube2 = App->physics->AddBody(cubes2, 0);
+		pb_cube2->SetPos(posX, 1, posZ);
+		pb_limits.PushBack(pb_cube2);
 		//Slider
 		cubes.Size(scale.x, 8, scale.y);
 		/*cubes.color = Green;*/
@@ -432,6 +442,13 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		break;
 
 	case 10:
+		//Limit
+		cubes2.Size(scale.x, scale.y, scale.z);
+		s_limits.PushBack(cubes2);
+		pb_cube2 = App->physics->AddBody(cubes2, 0);
+		pb_cube2->SetPos(posX, 1, posZ);
+		pb_limits.PushBack(pb_cube2);
+
 		//ramp begin
 		cubes.Size(scale.x, scale.y, scale.z-15);
 		cubes.SetRotation(-15, vec3(1, 0, 0));
@@ -455,6 +472,13 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		break;
 
 	case 12:
+		//Limit
+		cubes2.Size(scale.x, scale.y, scale.z);
+		s_limits.PushBack(cubes2);
+		pb_cube2 = App->physics->AddBody(cubes2, 0);
+		pb_cube2->SetPos(posX, 1, posZ);
+		pb_limits.PushBack(pb_cube2);
+
 		//ramp end
 		cubes.Size(scale.x, scale.y, scale.z-15);
 		cubes.SetRotation(10, vec3(1, 0, 0));
@@ -475,7 +499,21 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cubes.PushBack(pb_cube);
 		break;
 	case 14:
-		
+		//Floor
+		cubes.Size(scale.x, scale.y, scale.z);
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 1, posZ);
+		pb_cube->paiting = true;
+		pb_cubes.PushBack(pb_cube);
+		//ramp begin
+		cubes.Size(scale.x, scale.y, scale.z - 15);
+		cubes.SetRotation(-15, vec3(1, 0, 0));
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 3, posZ - 10);
+		pb_cube->paiting = true;
+		pb_cubes.PushBack(pb_cube);
 		break;
 	case 15:
 		//Floor

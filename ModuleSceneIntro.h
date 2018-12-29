@@ -64,7 +64,6 @@ public:
 	int count2 = 0;
 	int count3 = 0;
 	int circuit[MAX_CIRCUITSIZE];
-	int tricky[38];
 	int saving = 0;
 	int count = 0;
 	int countclue = 0;
