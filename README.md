@@ -17,7 +17,7 @@ Hey! This is a car game created by two students of CITM. The game has been creat
 
 - You need to go with your car to the yellow floor to pass the level. But be careful, this game is a bit unfair and some levels require to think open minded.
 
-- The game will give you a clue if you stuck in the level too much time.
+- The game will give you a clue if you stuck in the level too much time or you can click C to unlock immediately the clue.
 
 - You can see here the right paths so resolve each level: https://i.imgur.com/qxt1Nf8.jpg
 
