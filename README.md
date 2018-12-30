@@ -1,4 +1,4 @@
-﻿# UnFair Cario
+# UnFair Cario
 
 Hey! This is a car game created by two students of CITM. The game has been created with the Bullet and OpenGL libraries in C++.
 
@@ -19,8 +19,7 @@ Hey! This is a car game created by two students of CITM. The game has been creat
 
 - The game will give you a clue if you stuck in the level too much time or you can click C to unlock immediately the clue.
 
-- You can see here the right paths to resolve each level: https://i.imgur.com/qxt1Nf8.jpg
-
+- You can see here the right paths to resolve each level: https://i.imgur.com/B4PX4oE.jpg
 ## Constraint picked
 
 - We have chosen the slider constraint.
