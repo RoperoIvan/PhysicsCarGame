@@ -20,10 +20,12 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 	App->audio->PlayMusic("musicandfx/song.ogg");
-	Mix_VolumeMusic(0);//10
+	Mix_VolumeMusic(volume);//15
 	lvlfx = App->audio->LoadFx("musicandfx/zap2.wav");
 	gamewinfx = App->audio->LoadFx("musicandfx/win.wav");
 	deadfx = App->audio->LoadFx("musicandfx/dead.wav");
+
+	//Yellow sensor that moves around, lvl8
 	sensor_tricky.Size(30, 1, 15);
 	pb_tricky = App->physics->AddBody(sensor_tricky, 0);
 	sensor_tricky.color = Yellow;
@@ -31,6 +33,7 @@ bool ModuleSceneIntro::Start()
 	pb_tricky->GetTransform(&sensor_tricky.transform);
 	pb_tricky->SetAsSensor(true);
 	pb_tricky->collision_listeners.add(this);
+
 	 // 1 = create a path ; 2 = create a limit path; 3 = create a flag; 4 = create a slider; 
 	//5 = create an obstacle; 6 = create a trap; 7 create an invisible road; 8 set the win condition; 
 	//9 create the level changer; 10 create a ramp; 11 big wall; 12 end ramp; 13 clued path;

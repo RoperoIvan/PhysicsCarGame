@@ -66,6 +66,7 @@ public:
 	int circuit[MAX_CIRCUITSIZE];
 	int saving = 0;
 	int count = 0;
+	int volume = 15;
 	int lvlfx = 0;
 	int gamewinfx = 0;
 	int deadfx = 0;

@@ -195,7 +195,7 @@ void ModulePlayer::Restart(int map)
 void ModulePlayer::WinAchieved()
 {
 	//TO DO: put the music audio to the inital value (10) 
-	Mix_VolumeMusic(10);
+	Mix_VolumeMusic(App->scene_intro->volume);
 	SetScore();
 	App->scene_intro->timetrial.Read() == 0;
 	App->scene_intro->timetrial.Stop();
@@ -248,7 +248,7 @@ void ModulePlayer::UI(int reset)
 	case 3:
 		if (clue == true || help == true)
 		{
-			sprintf_s(title, "Clue : Have you tried driving in the middle?");
+			sprintf_s(title, "Clue : Have you tried driving by the middle?");
 		}
 		else
 		{
@@ -288,7 +288,7 @@ void ModulePlayer::UI(int reset)
 	case 7:
 		if (clue == true || help == true)
 		{
-			sprintf_s(title, "Clue: Come on, you can do it you are almost there! %i", App->scene_intro->timetrial.Read() / 1000);
+			sprintf_s(title, "Clue: You can do it the obvious way, but maybe theres a faster way to pass this level... %i", App->scene_intro->timetrial.Read() / 1000);
 		}
 		else
 		{
@@ -298,7 +298,7 @@ void ModulePlayer::UI(int reset)
 	case 8:
 		if (clue == true || help == true)
 		{
-			sprintf_s(title, "Clue: You have like... 5 seconds until the yellow thing changes its position ");
+			sprintf_s(title, "Clue: You have like... 2 seconds until the yellow thing changes its position ");
 		}
 		else
 		{
@@ -389,6 +389,22 @@ void ModulePlayer::Control()
 	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
 	{
 		help = true;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_X) == KEY_REPEAT)
+	{
+		if (App->scene_intro->volume < 200)
+		{
+			Mix_VolumeMusic(App->scene_intro->volume += 5);
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_REPEAT)
+	{
+		if (App->scene_intro->volume > 0)
+		{
+			Mix_VolumeMusic(App->scene_intro->volume -= 5);
+		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_REPEAT && controls)
 	{
