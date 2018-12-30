@@ -1,4 +1,4 @@
-# UnFair Cario
+﻿# UnFair Cario
 
 Hey! This is a car game created by two students of CITM. The game has been created with the Bullet and OpenGL libraries in C++.
 
@@ -12,6 +12,14 @@ Hey! This is a car game created by two students of CITM. The game has been creat
 ## Github Repository
 
 - Link : https://github.com/RoperoIvan/PhysicsCarGame
+
+## Description
+
+
+
+This games tries to pick up the spirit of the Unfair Mario game. It is a game that always tries to make the player uncomfortable and sometimes can be frustating.
+
+You drive a car around different circuits trying to arrive to the yellow floor to pass to the next level. Have fun and don't let the game make you angry!
 
 ## Main Objective
 
@@ -44,7 +52,7 @@ Hey! This is a car game created by two students of CITM. The game has been creat
 
 - F1 = you will see the debug mode.
 
-- R = restart the level.
+- R = restart the game.
 
 - S = stop/start the sirens.
 

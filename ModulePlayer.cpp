@@ -199,6 +199,7 @@ void ModulePlayer::WinAchieved()
 	SetScore();
 	App->scene_intro->timetrial.Read() == 0;
 	App->scene_intro->timetrial.Stop();
+	Nmap = 0;
 	Restart(Nmap);	
 	playerTime.Start();
 	App->scene_intro->lvltime.Start();
@@ -292,7 +293,7 @@ void ModulePlayer::UI(int reset)
 		}
 		else
 		{
-			sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f YOU MUST PASS THE LEVEL IN LESS THAN 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
+			sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f YOU MUST PASS THE LEVEL IN LESS THAN 18 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
 		}
 		break;
 	case 8:
@@ -384,7 +385,7 @@ void ModulePlayer::Control()
 	}
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
-		Restart(Nmap);
+		WinAchieved();
 	}
 	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
 	{
